@@ -32,7 +32,7 @@ public enum FxmlView {
 		}
 		@Override
 		public String getFxmlFile() {
-			return "/fxml/";
+			return "/fxml/Inicio.fxml";
 		}
 	};
 

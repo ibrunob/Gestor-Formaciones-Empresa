@@ -1,0 +1,48 @@
+
+.titleHeader, .subtitleHeader, .mainTitle, .subtitle, .label {
+    -fx-font-family: "Comic Sans MS"; 
+}
+
+.titleHeader {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.subtitleHeader {
+    -fx-text-fill: #777;
+}
+
+
+.mainTitle {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+.subtitle {
+    -fx-text-fill: #555;
+}
+
+.label {
+    -fx-font-size: 14px;
+}
+
+.inputField {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 8 12 8 12;
+    -fx-prompt-text-fill: #999;
+}
+
+.btnLogin {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 10 25 10 25;
+    -fx-font-size: 16px;
+}
+.btnLogin:hover {
+    -fx-background-color: #ddd;
+}

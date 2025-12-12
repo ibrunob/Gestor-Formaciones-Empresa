@@ -1,1 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="300.0" prefWidth="400.0" spacing="20.0" 
+      style="-fx-background-color: linear-gradient(to bottom, #1e3c72, #2a5298);"
+      xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="dev.brunob.ProyectoBase2025.controller.InicioController">
+    <children>
+        <Label text="Sistema de Gestión de Formaciones en Empresa" textFill="WHITE">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <ProgressIndicator fx:id="progressIndicator" prefHeight="50.0" prefWidth="50.0" />
+        <Label text="Cargando..." textFill="WHITE">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Label text="Desarrollado por Bruno Ortiz Blanco" textFill="#cccccc">
+            <font>
+                <Font size="12.0" />
+            </font>
+            <VBox.margin>
+                <Insets top="30.0" />
+            </VBox.margin>
+        </Label>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>
 
