@@ -28,26 +28,50 @@ public class StageManager {
 
     public void switchScene(final FxmlView view) {
         Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
-        show(viewRootNodeHierarchy, view.getTitle());
+        show(viewRootNodeHierarchy, view.getTitle(), view);
     }
     
-    private void show(final Parent rootnode, String title) {
+    private void show(final Parent rootnode, String title, FxmlView view) {
         Scene scene = prepareScene(rootnode);
-        //scene.getStylesheets().add("/styles/Styles.css");
         
-        //primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
-        primaryStage.setWidth(1000);
-        primaryStage.setHeight(600);
-        primaryStage.setResizable(false);
-        primaryStage.centerOnScreen();
+        
+        if (isMenuView(view)) {
+            // Para los menus principales, maximizar la ventana
+            primaryStage.setResizable(true);
+            primaryStage.setMaximized(true);
+        } else if (view == FxmlView.LOGIN) {
+            // Para el login, ventana fija centrada
+            primaryStage.setMaximized(false);
+            primaryStage.setResizable(false);
+            primaryStage.setWidth(1000);
+            primaryStage.setHeight(600);
+            primaryStage.centerOnScreen();
+        } else {
+            primaryStage.setMaximized(false);
+            primaryStage.setResizable(true);
+            primaryStage.setWidth(1200);
+            primaryStage.setHeight(700);
+            primaryStage.centerOnScreen();
+        }
         
         try {
             primaryStage.show();
         } catch (Exception exception) {
             logAndExit ("Unable to show scene for title" + title,  exception);
         }
+    }
+    
+    /**
+     * Verifica si la vista es uno de los menús principales por rol o pantallas de gestión.
+     */
+    private boolean isMenuView(FxmlView view) {
+        return view == FxmlView.MENU_ADMIN || 
+               view == FxmlView.MENU_PROFESOR || 
+               view == FxmlView.MENU_TUTOR_EMPRESA || 
+               view == FxmlView.MENU_ESTUDIANTE ||
+               view == FxmlView.USER;
     }
     
     private Scene prepareScene(Parent rootnode){

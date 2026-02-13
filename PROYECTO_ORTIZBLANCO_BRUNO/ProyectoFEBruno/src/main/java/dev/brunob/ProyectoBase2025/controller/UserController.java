@@ -14,6 +14,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import dev.brunob.ProyectoBase2025.config.StageManager;
+import dev.brunob.ProyectoBase2025.modelo.Administrador;
+import dev.brunob.ProyectoBase2025.modelo.Estudiante;
+import dev.brunob.ProyectoBase2025.modelo.Profesor;
+import dev.brunob.ProyectoBase2025.modelo.Role;
+import dev.brunob.ProyectoBase2025.modelo.Tutor;
 import dev.brunob.ProyectoBase2025.modelo.User;
 import dev.brunob.ProyectoBase2025.services.UserService;
 import dev.brunob.ProyectoBase2025.view.FxmlView;
@@ -28,6 +33,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -43,18 +49,15 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 /**
- * @author Ram Alapure
- * @since 05-04-2017
+ * Controlador para la gestión de usuarios del sistema
+ * Permite crear, actualizar y eliminar usuarios
  */
-
 @Controller
 public class UserController implements Initializable {
-
-	@FXML
-	private Button btnLogout;
 
 	@FXML
 	private Label userId;
@@ -91,6 +94,18 @@ public class UserController implements Initializable {
 
 	@FXML
 	private Button saveUser;
+
+	@FXML
+	private VBox panelProfesor;
+
+	@FXML
+	private CheckBox cbCoordinador;
+
+	@FXML
+	private VBox panelTutor;
+
+	@FXML
+	private TextField txtTelefono;
 
 	@FXML
 	private TableView<User> userTable;
@@ -130,19 +145,34 @@ public class UserController implements Initializable {
 	private UserService userService;
 
 	private ObservableList<User> userList = FXCollections.observableArrayList();
-	private ObservableList<String> roles = FXCollections.observableArrayList("Admin", "User");
+
+	private ObservableList<String> roles = FXCollections.observableArrayList();
 
 	@FXML
 	private void exit(ActionEvent event) {
 		Platform.exit();
 	}
 
-	/**
-	 * Logout and go to the login page
-	 */
 	@FXML
 	private void logout(ActionEvent event) throws IOException {
 		stageManager.switchScene(FxmlView.LOGIN);
+	}
+
+	@FXML
+	private void volverMenu(ActionEvent event) throws IOException {
+		stageManager.switchScene(FxmlView.MENU_ADMIN);
+	}
+
+	@FXML
+	private void acercaDe(ActionEvent event) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Acerca de");
+		alert.setHeaderText("Sistema de Gestión FE");
+		alert.setContentText("Sistema de Gestión de Formaciones en Empresa\n" +
+				"Versión 1.0\n\n" +
+				"CIFP La Laboral - Gijón\n" +
+				"Desarrollado por Bruno Ortiz Blanco");
+		alert.showAndWait();
 	}
 
 	@FXML
@@ -153,15 +183,17 @@ public class UserController implements Initializable {
 	@FXML
 	private void saveUser(ActionEvent event) {
 
-		if (validate("First Name", getFirstName(), "[a-zA-Z]+") && validate("Last Name", getLastName(), "[a-zA-Z]+")
-				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())
-				&& emptyValidation("Role", getRole() == null)) {
+		if (validate("Nombre", getFirstName(), "[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")
+				&& validate("Apellidos", getLastName(), "[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")
+				&& emptyValidation("Fecha de Nacimiento", dob.getEditor().getText().isEmpty())
+				&& emptyValidation("Rol", getRole() == null)) {
 
-			if (userId.getText() == null || userId.getText() == "") {
+			if (userId.getText() == null || userId.getText().isEmpty()) {
+				// Crear nuevo usuario
 				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& emptyValidation("Password", getPassword().isEmpty())) {
+						&& emptyValidation("Contraseña", getPassword().isEmpty())) {
 
-					User user = new User();
+					User user = createUserByRole(getRole());
 					user.setFirstName(getFirstName());
 					user.setLastName(getLastName());
 					user.setDob(getDob());
@@ -170,18 +202,22 @@ public class UserController implements Initializable {
 					user.setEmail(getEmail());
 					user.setPassword(getPassword());
 
-					User newUser = userService.save(user);
+					// Campos especificos del rol
+					applyRoleSpecificFields(user);
 
+					User newUser = userService.save(user);
 					saveAlert(newUser);
 				}
-
 			} else {
+				// Actualizar usuario existente
 				User user = userService.find(Long.parseLong(userId.getText()));
 				user.setFirstName(getFirstName());
 				user.setLastName(getLastName());
 				user.setDob(getDob());
 				user.setGender(getGender());
-				user.setRole(getRole());
+
+				applyRoleSpecificFields(user);
+				
 				User updatedUser = userService.update(user);
 				updateAlert(updatedUser);
 			}
@@ -189,7 +225,41 @@ public class UserController implements Initializable {
 			clearFields();
 			loadUserDetails();
 		}
+	}
 
+	/**
+	 * Crea la instancia correcta de User según el rol seleccionado
+	 */
+	private User createUserByRole(String roleName) {
+		Role role = Role.fromDisplayName(roleName);
+		if (role == null) {
+			return new User();
+		}
+		switch (role) {
+			case ADMINISTRADOR:
+				return new Administrador();
+			case PROFESOR_TUTOR:
+				return new Profesor();
+			case TUTOR_EMPRESA:
+				return new Tutor();
+			case ESTUDIANTE:
+				return new Estudiante();
+			default:
+				return new User();
+		}
+	}
+
+	/**
+	 * Aplica los campos específicos del rol al usuario.
+	 */
+	private void applyRoleSpecificFields(User user) {
+		if (user instanceof Profesor) {
+			Profesor profesor = (Profesor) user;
+			profesor.setEsCoordinador(cbCoordinador.isSelected());
+		} else if (user instanceof Tutor) {
+			Tutor tutor = (Tutor) user;
+			tutor.setTelefono(txtTelefono.getText());
+		}
 	}
 
 	@FXML
@@ -197,13 +267,14 @@ public class UserController implements Initializable {
 		List<User> users = userTable.getSelectionModel().getSelectedItems();
 
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation Dialog");
+		alert.setTitle("Confirmar eliminación");
 		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to delete selected?");
+		alert.setContentText("¿Está seguro de que desea eliminar el usuario seleccionado?");
 		Optional<ButtonType> action = alert.showAndWait();
 
-		if (action.get() == ButtonType.OK)
+		if (action.isPresent() && action.get() == ButtonType.OK) {
 			userService.deleteInBatch(users);
+		}
 
 		loadUserDetails();
 	}
@@ -213,34 +284,40 @@ public class UserController implements Initializable {
 		firstName.clear();
 		lastName.clear();
 		dob.getEditor().clear();
+		dob.setValue(null);
 		rbMale.setSelected(true);
 		rbFemale.setSelected(false);
 		cbRole.getSelectionModel().clearSelection();
 		email.clear();
 		password.clear();
+		cbCoordinador.setSelected(false);
+		txtTelefono.clear();
+		panelProfesor.setVisible(false);
+		panelProfesor.setManaged(false);
+		panelTutor.setVisible(false);
+		panelTutor.setManaged(false);
+
+		cbRole.setDisable(false);
+		email.setDisable(false);
+		password.setDisable(false);
 	}
 
 	private void saveAlert(User user) {
-
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User saved successfully.");
+		alert.setTitle("Usuario guardado");
 		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getFirstName() + " " + user.getLastName() + " has been created and \n"
-				+ getGenderTitle(user.getGender()) + " id is " + user.getId() + ".");
+		alert.setContentText("El usuario " + user.getFirstName() + " " + user.getLastName()
+				+ " ha sido creado correctamente con ID " + user.getId() + ".");
 		alert.showAndWait();
 	}
 
 	private void updateAlert(User user) {
-
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User updated successfully.");
+		alert.setTitle("Usuario actualizado");
 		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getFirstName() + " " + user.getLastName() + " has been updated.");
+		alert.setContentText("El usuario " + user.getFirstName() + " " + user.getLastName()
+				+ " ha sido actualizado correctamente.");
 		alert.showAndWait();
-	}
-
-	private String getGenderTitle(String gender) {
-		return (gender.equals("Male")) ? "his" : "her";
 	}
 
 	public String getFirstName() {
@@ -256,7 +333,7 @@ public class UserController implements Initializable {
 	}
 
 	public String getGender() {
-		return rbMale.isSelected() ? "Male" : "Female";
+		return rbMale.isSelected() ? "Masculino" : "Femenino";
 	}
 
 	public String getRole() {
@@ -273,35 +350,43 @@ public class UserController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		for (Role role : Role.values()) {
+			roles.add(role.getDisplayName());
+		}
 		cbRole.setItems(roles);
+
+		// Listener para los campos específicos por rol
+		cbRole.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+			toggleRoleSpecificFields(newVal);
+		});
+
+		// Ocultar paneles específicos de rol al inicio
+		panelProfesor.setVisible(false);
+		panelProfesor.setManaged(false);
+		panelTutor.setVisible(false);
+		panelTutor.setManaged(false);
 
 		userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		setColumnProperties();
 
-		// Add all users into table
 		loadUserDetails();
 	}
 
-	/*
-	 * Set All userTable column properties
+	/**
+	 * Muestra u oculta los campos específicos según el rol seleccionado.
 	 */
-	private void setColumnProperties() {
-		/*
-		 * Override date format in table
-		 * colDOB.setCellFactory(TextFieldTableCell.forTableColumn(new
-		 * StringConverter<LocalDate>() { String pattern = "dd/MM/yyyy";
-		 * DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-		 * 
-		 * @Override public String toString(LocalDate date) { if (date != null) { return
-		 * dateFormatter.format(date); } else { return ""; } }
-		 * 
-		 * @Override public LocalDate fromString(String string) { if (string != null &&
-		 * !string.isEmpty()) { return LocalDate.parse(string, dateFormatter); } else {
-		 * return null; } } }));
-		 */
+	private void toggleRoleSpecificFields(String roleName) {
+		boolean isProfesor = Role.PROFESOR_TUTOR.getDisplayName().equals(roleName);
+		boolean isTutor = Role.TUTOR_EMPRESA.getDisplayName().equals(roleName);
 
+		panelProfesor.setVisible(isProfesor);
+		panelProfesor.setManaged(isProfesor);
+		panelTutor.setVisible(isTutor);
+		panelTutor.setManaged(isTutor);
+	}
+
+	private void setColumnProperties() {
 		colUserId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 		colLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -350,29 +435,42 @@ public class UserController implements Initializable {
 					firstName.setText(user.getFirstName());
 					lastName.setText(user.getLastName());
 					dob.setValue(user.getDob());
-					if (user.getGender().equals("Male"))
+					if ("Masculino".equals(user.getGender())) {
 						rbMale.setSelected(true);
-					else
+					} else {
 						rbFemale.setSelected(true);
+					}
 					cbRole.getSelectionModel().select(user.getRole());
+					email.setText(user.getEmail());
+
+					cbRole.setDisable(true);
+					email.setDisable(true);
+					password.setDisable(true);
+
+					if (user instanceof Profesor) {
+						Profesor profesor = (Profesor) user;
+						cbCoordinador.setSelected(
+								profesor.getEsCoordinador() != null && profesor.getEsCoordinador());
+					} else if (user instanceof Tutor) {
+						Tutor tutor = (Tutor) user;
+						txtTelefono.setText(tutor.getTelefono() != null ? tutor.getTelefono() : "");
+					}
+
+					toggleRoleSpecificFields(user.getRole());
 				}
 			};
 			return cell;
 		}
 	};
 
-	/*
-	 * Add All users to observable list and update table
-	 */
 	private void loadUserDetails() {
 		userList.clear();
 		userList.addAll(userService.findAll());
-
 		userTable.setItems(userList);
 	}
 
 	/*
-	 * Validations
+	 * Validaciones
 	 */
 	private boolean validate(String field, String value, String pattern) {
 		if (!value.isEmpty()) {
@@ -401,15 +499,16 @@ public class UserController implements Initializable {
 
 	private void validationAlert(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Validation Error");
+		alert.setTitle("Error de Validación");
 		alert.setHeaderText(null);
-		if (field.equals("Role"))
-			alert.setContentText("Please Select " + field);
-		else {
-			if (empty)
-				alert.setContentText("Please Enter " + field);
-			else
-				alert.setContentText("Please Enter Valid " + field);
+		if (field.equals("Rol")) {
+			alert.setContentText("Por favor, seleccione un " + field);
+		} else {
+			if (empty) {
+				alert.setContentText("Por favor, introduzca " + field);
+			} else {
+				alert.setContentText("Por favor, introduzca un " + field + " válido");
+			}
 		}
 		alert.showAndWait();
 	}
