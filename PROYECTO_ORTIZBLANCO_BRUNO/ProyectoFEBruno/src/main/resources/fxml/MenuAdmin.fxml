@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.72" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dev.brunob.ProyectoBase2025.controller.MenuAdminController"
+            stylesheets="@../styles/Menu.css">
+    
+    <top>
+        <VBox>
+            <MenuBar styleClass="menu-bar">
+                <menus>
+                    <Menu text="Archivo">
+                        <items>
+                            <MenuItem text="Cerrar Sesión" onAction="#logout"/>
+                            <MenuItem text="Salir" onAction="#exit"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Gestión">
+                        <items>
+                            <MenuItem text="Usuarios" onAction="#gestionUsuarios"/>
+                            <MenuItem text="Empresas" onAction="#gestionEmpresas"/>
+                            <MenuItem text="Estudiantes" onAction="#gestionEstudiantes"/>
+                            <MenuItem text="Tutores" onAction="#gestionTutores"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Informes">
+                        <items>
+                            <MenuItem text="Generar Informes" onAction="#generarInformes"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Ayuda">
+                        <items>
+                            <MenuItem text="Acerca de" onAction="#acercaDe"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+            
+            <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-panel">
+                <padding>
+                    <Insets bottom="15.0" left="20.0" right="20.0" top="15.0"/>
+                </padding>
+                <children>
+                    <ImageView fitWidth="60.0" fitHeight="60.0" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/logoLaboral.jpg"/>
+                        </image>
+                    </ImageView>
+                    <VBox spacing="5.0">
+                        <Label text="Panel de Administrador" styleClass="title-header"/>
+                        <Label fx:id="lblUserInfo" text="Usuario: " styleClass="subtitle-header"/>
+                    </VBox>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Button text="Cerrar Sesión" onAction="#logout" styleClass="btn-logout"/>
+                </children>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox alignment="CENTER" spacing="30.0">
+            <padding>
+                <Insets bottom="40.0" left="60.0" right="60.0" top="40.0"/>
+            </padding>
+            
+            <Label text="Gestión de Formaciones en Empresa" styleClass="main-title"/>
+            <Label text="Seleccione una opción para continuar" styleClass="subtitle"/>
+            
+            <Separator prefWidth="600.0"/>
+            
+            <GridPane hgap="40.0" vgap="40.0" alignment="CENTER">
+                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0" 
+                      GridPane.columnIndex="0" GridPane.rowIndex="0"
+                      onMouseClicked="#gestionUsuarios">
+                    <Label text="👥" style="-fx-font-size: 48px;"/>
+                    <Label text="Gestión de Usuarios" styleClass="card-title"/>
+                    <Label text="Alta, baja y modificación de usuarios" styleClass="card-description"/>
+                </VBox>
+                
+                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
+                      GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      onMouseClicked="#gestionEmpresas">
+                    <Label text="🏢" style="-fx-font-size: 48px;"/>
+                    <Label text="Gestión de Empresas" styleClass="card-title"/>
+                    <Label text="Administrar empresas colaboradoras" styleClass="card-description"/>
+                </VBox>
+                
+                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
+                      GridPane.columnIndex="2" GridPane.rowIndex="0"
+                      onMouseClicked="#gestionEstudiantes">
+                    <Label text="🎓" style="-fx-font-size: 48px;"/>
+                    <Label text="Gestión de Estudiantes" styleClass="card-title"/>
+                    <Label text="Administrar alumnos en prácticas" styleClass="card-description"/>
+                </VBox>
+                
+                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
+                      GridPane.columnIndex="0" GridPane.rowIndex="1"
+                      onMouseClicked="#gestionTutores">
+                    <Label text="👨‍🏫" style="-fx-font-size: 48px;"/>
+                    <Label text="Gestión de Tutores" styleClass="card-title"/>
+                    <Label text="Asignar tutores a estudiantes" styleClass="card-description"/>
+                </VBox>
+                
+                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
+                      GridPane.columnIndex="1" GridPane.rowIndex="1"
+                      onMouseClicked="#gestionDocumentos">
+                    <Label text="📁" style="-fx-font-size: 48px;"/>
+                    <Label text="Gestión Documental" styleClass="card-title"/>
+                    <Label text="Documentación y archivos" styleClass="card-description"/>
+                </VBox>
+                
+                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
+                      GridPane.columnIndex="2" GridPane.rowIndex="1"
+                      onMouseClicked="#generarInformes">
+                    <Label text="📊" style="-fx-font-size: 48px;"/>
+                    <Label text="Informes" styleClass="card-title"/>
+                    <Label text="Generar informes y estadísticas" styleClass="card-description"/>
+                </VBox>
+            </GridPane>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER" spacing="300.0" styleClass="footer-panel">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <Label text="Sistema de Gestión FE - CIFP La Laboral v1.0"/>
+                <Label text="Bruno Ortiz Blanco"/>
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -25,7 +25,7 @@ public enum FxmlView {
 			return "/fxml/Login.fxml";
 		}
 	},
-	INICIO{
+	INICIO {
 		@Override
 		public String getTitle() {
 			return getStringFromResourceBundle("inicio.title");
@@ -33,6 +33,46 @@ public enum FxmlView {
 		@Override
 		public String getFxmlFile() {
 			return "/fxml/Inicio.fxml";
+		}
+	},
+	MENU_ADMIN {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("menu.admin.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/MenuAdmin.fxml";
+		}
+	},
+	MENU_PROFESOR {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("menu.profesor.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/MenuProfesor.fxml";
+		}
+	},
+	MENU_TUTOR_EMPRESA {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("menu.tutor.empresa.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/MenuTutorEmpresa.fxml";
+		}
+	},
+	MENU_ESTUDIANTE {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("menu.estudiante.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/MenuEstudiante.fxml";
 		}
 	};
 

@@ -10,74 +10,122 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="600.0" prefWidth="1000.0"
+            style="-fx-background-color: linear-gradient(to bottom, #1e3c72, #2a5298);"
             xmlns="http://javafx.com/javafx/8.0.72"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="dev.brunob.ProyectoBase2025.controller.LoginController"
-            stylesheets="@../styles/Login.css">
+            fx:controller="dev.brunob.ProyectoBase2025.controller.LoginController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="20.0">
+        <HBox alignment="CENTER" spacing="20.0">
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                <Insets bottom="30.0" left="20.0" right="20.0" top="40.0"/>
             </padding>
             <children>
                 <ImageView fitWidth="80.0" fitHeight="80.0" preserveRatio="true">
                     <image>
-                        <Image url="@../images/edit.png"/>
+                        <Image url="@../images/logoLaboral.jpg"/>
                     </image>
                 </ImageView>
 
-                <VBox spacing="5.0">
-                    <Label text="CIFP La Laboral Gijón" styleClass="titleHeader"/>
-                    <Label text="Departamento de Informática y Comunicaciones" styleClass="subtitleHeader"/>
+                <VBox spacing="5.0" alignment="CENTER_LEFT">
+                    <Label text="CIFP La Laboral Gijón" textFill="WHITE">
+                        <font>
+                            <Font name="System Bold" size="22.0"/>
+                        </font>
+                    </Label>
+                    <Label text="Departamento de Informática y Comunicaciones" textFill="#cccccc">
+                        <font>
+                            <Font size="14.0"/>
+                        </font>
+                    </Label>
                 </VBox>
             </children>
         </HBox>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="20.0">
+        <VBox alignment="CENTER" spacing="20.0" maxWidth="400.0">
             <padding>
-                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0"/>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="20.0"/>
             </padding>
             <children>
+                <Label text="Inicio de Sesión" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="28.0"/>
+                    </font>
+                </Label>
 
-                <Label text="Inicio de Sesión" styleClass="mainTitle"/>
+                <Label text="Ingrese sus credenciales para continuar" textFill="#cccccc">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="20.0"/>
+                    </VBox.margin>
+                </Label>
 
-                <Label text="Ingrese sus credenciales" styleClass="subtitle"/>
-
-                <VBox spacing="10.0">
-                    <Label text="Usuario" styleClass="label"/>
-                    <TextField fx:id="username" promptText="Ingrese su usuario" styleClass="inputField"/>
+                <VBox spacing="8.0" alignment="CENTER_LEFT">
+                    <Label text="Usuario" textFill="WHITE">
+                        <font>
+                            <Font size="14.0"/>
+                        </font>
+                    </Label>
+                    <TextField fx:id="username" promptText="Ingrese su usuario" 
+                               prefWidth="350.0" prefHeight="40.0"
+                               style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-font-size: 14px;"/>
                 </VBox>
 
-                <VBox spacing="10.0">
-                    <Label text="Contraseña" styleClass="label"/>
-                    <PasswordField fx:id="password" promptText="Ingrese su contraseña" styleClass="inputField"/>
+                <VBox spacing="8.0" alignment="CENTER_LEFT">
+                    <Label text="Contraseña" textFill="WHITE">
+                        <font>
+                            <Font size="14.0"/>
+                        </font>
+                    </Label>
+                    <PasswordField fx:id="password" promptText="Ingrese su contraseña" 
+                                   prefWidth="350.0" prefHeight="40.0"
+                                   style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 8px; -fx-border-radius: 8px; -fx-font-size: 14px;"/>
                 </VBox>
 
-                <Label fx:id="lblLogin" textFill="RED"/>
+                <Label fx:id="lblLogin" textFill="#ff6b6b">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </Label>
 
                 <Button text="Iniciar Sesión"
                         fx:id="btnLogin"
                         onAction="#login"
-                        styleClass="btnLogin"/>
+                        prefWidth="350.0" prefHeight="45.0"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 8px; -fx-cursor: hand;">
+                    <VBox.margin>
+                        <Insets top="10.0"/>
+                    </VBox.margin>
+                </Button>
             </children>
         </VBox>
     </center>
 
     <bottom>
-        <HBox alignment="CENTER" spacing="300.0">
+        <VBox alignment="CENTER" spacing="5.0">
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                <Insets bottom="20.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
             <children>
-                <Label text="Sistema de Gestión de Formaciones en Empresa v1.0"/>
-                <Label text="Bruno Ortiz Blanco"/>
+                <Label text="Sistema de Gestión de Formaciones en Empresa v1.0" textFill="#aaaaaa">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Label>
+                <Label text="Desarrollado por Bruno Ortiz Blanco" textFill="#888888">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
             </children>
-        </HBox>
+        </VBox>
     </bottom>
 
 </BorderPane>
