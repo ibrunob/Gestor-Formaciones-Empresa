@@ -7,15 +7,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 /**
- * @author Ram Alapure
- * @since 05-04-2017
+ * Entidad base Usuario del sistema.
+ * Utiliza herencia JOINED
  */
-
 @Entity
-@Table(name = "User")
+@Table(name = "user")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
 	@Id
