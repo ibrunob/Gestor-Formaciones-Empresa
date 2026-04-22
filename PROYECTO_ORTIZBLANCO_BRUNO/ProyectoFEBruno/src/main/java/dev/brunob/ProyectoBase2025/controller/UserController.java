@@ -359,6 +359,7 @@ public class UserController extends BaseMenuController implements Initializable 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		roles.clear();
 		for (Role role : Role.values()) {
 			roles.add(role.getDisplayName());
 		}
