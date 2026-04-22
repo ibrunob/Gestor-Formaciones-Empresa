@@ -214,14 +214,12 @@ public class UserController extends BaseMenuController implements Initializable 
 				}
 			} else {
 				// Actualizar usuario existente
-				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& emptyValidation("Contraseña", getPassword().isEmpty())) {
+				if (emptyValidation("Contraseña", getPassword().isEmpty())) {
 					User user = userService.find(Long.parseLong(userId.getText()));
 					user.setFirstName(getFirstName());
 					user.setLastName(getLastName());
 					user.setDob(getDob());
 					user.setGender(getGender());
-					user.setEmail(getEmail());
 					user.setPassword(getPassword());
 
 					applyRoleSpecificFields(user);
@@ -455,7 +453,7 @@ public class UserController extends BaseMenuController implements Initializable 
 					password.setText(user.getPassword() != null ? user.getPassword() : "");
 
 					cbRole.setDisable(true);
-					email.setDisable(false);
+					email.setDisable(true);
 					password.setDisable(false);
 
 					if (user instanceof Profesor) {
