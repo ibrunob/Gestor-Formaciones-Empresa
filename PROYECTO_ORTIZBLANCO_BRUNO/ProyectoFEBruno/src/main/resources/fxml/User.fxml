@@ -64,7 +64,7 @@
                </ImageView>
                <VBox spacing="5.0">
                   <Label text="Gestión de Usuarios" styleClass="title-header"/>
-                  <Label text="Alta, baja y modificación de usuarios del sistema" styleClass="subtitle-header"/>
+                  <Label fx:id="lblUserInfo" text="Usuario: " styleClass="subtitle-header"/>
                </VBox>
                <HBox HBox.hgrow="ALWAYS"/>
                <Button text="Volver al Menú" onAction="#volverMenu" styleClass="btn-logout"/>
