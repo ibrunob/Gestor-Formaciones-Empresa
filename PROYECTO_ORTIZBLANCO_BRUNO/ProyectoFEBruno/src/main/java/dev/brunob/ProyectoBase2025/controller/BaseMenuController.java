@@ -49,6 +49,7 @@ public abstract class BaseMenuController {
     @FXML
     protected void logout(ActionEvent event) {
         currentUser = null;
+        stageManager.clearCurrentUser();
         stageManager.switchScene(FxmlView.LOGIN);
     }
 

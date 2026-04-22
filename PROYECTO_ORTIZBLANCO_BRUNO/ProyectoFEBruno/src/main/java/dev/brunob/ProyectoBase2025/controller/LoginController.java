@@ -16,9 +16,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.SVGPath;
 
 /**
  * Controlador para la pantalla de login.
@@ -36,10 +38,22 @@ public class LoginController implements Initializable {
     private PasswordField password;
 
     @FXML
+    private TextField visiblePassword;
+
+    @FXML
     private TextField username;
 
     @FXML
     private Label lblLogin;
+
+    @FXML
+    private Button btnTogglePassword;
+
+    @FXML
+    private SVGPath passwordToggleSlash;
+
+    @FXML
+    private Hyperlink linkForgotPassword;
 
     @Autowired
     private UserService userService;
@@ -64,6 +78,8 @@ public class LoginController implements Initializable {
      * @param user El usuario autenticado
      */
     private void redirectToMenuByRole(User user) {
+        stageManager.setCurrentUser(user);
+
         String roleStr = user.getRole();
         Role role = Role.fromDisplayName(roleStr);
 
@@ -122,7 +138,7 @@ public class LoginController implements Initializable {
     }
 
     public String getPassword() {
-        return password.getText();
+        return visiblePassword != null && visiblePassword.isVisible() ? visiblePassword.getText() : password.getText();
     }
 
     public String getUsername() {
@@ -131,6 +147,42 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        visiblePassword.textProperty().bindBidirectional(password.textProperty());
+        updatePasswordVisibility(false);
+    }
 
+    @FXML
+    private void togglePasswordVisibility(ActionEvent event) {
+        boolean showPlainText = !visiblePassword.isVisible();
+        updatePasswordVisibility(showPlainText);
+
+        if (showPlainText) {
+            visiblePassword.requestFocus();
+            visiblePassword.positionCaret(visiblePassword.getText().length());
+        } else {
+            password.requestFocus();
+            password.positionCaret(password.getText().length());
+        }
+    }
+
+    @FXML
+    private void forgotPassword(ActionEvent event) {
+        lblLogin.setText("Contacta con administración para restablecer la contraseña");
+    }
+
+    private void updatePasswordVisibility(boolean showPlainText) {
+        visiblePassword.setVisible(showPlainText);
+        visiblePassword.setManaged(showPlainText);
+        password.setVisible(!showPlainText);
+        password.setManaged(!showPlainText);
+
+        if (passwordToggleSlash != null) {
+            passwordToggleSlash.setVisible(showPlainText);
+            passwordToggleSlash.setManaged(showPlainText);
+        }
+
+        if (btnTogglePassword != null) {
+            btnTogglePassword.setAccessibleText(showPlainText ? "Ocultar contraseña" : "Mostrar contraseña");
+        }
     }
 }

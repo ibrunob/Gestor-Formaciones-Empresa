@@ -6,7 +6,10 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 
+import dev.brunob.ProyectoBase2025.controller.BaseMenuController;
+import dev.brunob.ProyectoBase2025.modelo.User;
 import dev.brunob.ProyectoBase2025.view.FxmlView;
+import javafx.fxml.FXMLLoader;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,6 +23,7 @@ public class StageManager {
     private static final Logger LOG = getLogger(StageManager.class);
     private final Stage primaryStage;
     private final SpringFXMLLoader springFXMLLoader;
+    private User currentUser;
 
     public StageManager(SpringFXMLLoader springFXMLLoader, Stage stage) {
         this.springFXMLLoader = springFXMLLoader;
@@ -27,8 +31,18 @@ public class StageManager {
     }
 
     public void switchScene(final FxmlView view) {
-        Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
+        LoadedView loadedView = loadView(view.getFxmlFile());
+        applyCurrentUser(loadedView.controller());
+        Parent viewRootNodeHierarchy = loadedView.rootNode();
         show(viewRootNodeHierarchy, view.getTitle(), view);
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void clearCurrentUser() {
+        currentUser = null;
     }
     
     private void show(final Parent rootnode, String title, FxmlView view) {
@@ -90,15 +104,27 @@ public class StageManager {
      *
      * @return Parent root node of the FXML document hierarchy
      */
-    private Parent loadViewNodeHierarchy(String fxmlFilePath) {
+    private LoadedView loadView(String fxmlFilePath) {
         Parent rootNode = null;
+        Object controller = null;
         try {
-            rootNode = springFXMLLoader.load(fxmlFilePath);
+            FXMLLoader loader = springFXMLLoader.loadFXMLLoader(fxmlFilePath);
+            rootNode = loader.getRoot();
+            controller = loader.getController();
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
         } catch (Exception exception) {
             logAndExit("Unable to load FXML view" + fxmlFilePath, exception);
         }
-        return rootNode;
+        return new LoadedView(rootNode, controller);
+    }
+
+    private void applyCurrentUser(Object controller) {
+        if (currentUser != null && controller instanceof BaseMenuController menuController) {
+            menuController.setCurrentUser(currentUser);
+        }
+    }
+
+    private record LoadedView(Parent rootNode, Object controller) {
     }
     
     
