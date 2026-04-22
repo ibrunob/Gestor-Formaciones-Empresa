@@ -46,6 +46,18 @@ public class DocumentoService {
         return documentoRepository.findByTipo(tipo);
     }
 
+    public List<Documento> findByProfesor(Long profesorId) {
+        return documentoRepository.findByFormacionEmpresaProfesorId(profesorId);
+    }
+
+    public List<Documento> findByTutor(Long tutorId) {
+        return documentoRepository.findByFormacionEmpresaTutorId(tutorId);
+    }
+
+    public List<Documento> findByEstudiante(Long estudianteId) {
+        return documentoRepository.findByFormacionEmpresaEstudianteId(estudianteId);
+    }
+
     public void deleteInBatch(List<Documento> documentos) {
         documentoRepository.deleteAll(documentos);
     }

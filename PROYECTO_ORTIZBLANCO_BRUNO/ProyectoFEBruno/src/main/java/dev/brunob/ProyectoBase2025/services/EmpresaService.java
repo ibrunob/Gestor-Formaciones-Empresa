@@ -35,7 +35,7 @@ public class EmpresaService {
     }
 
     public List<Empresa> findAll() {
-        return empresaRepository.findAll();
+        return empresaRepository.findAllWithTutores();
     }
 
     public Empresa findByNombre(String nombre) {
