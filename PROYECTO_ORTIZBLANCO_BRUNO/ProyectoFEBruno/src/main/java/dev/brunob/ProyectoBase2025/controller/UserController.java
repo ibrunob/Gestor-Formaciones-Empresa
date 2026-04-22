@@ -57,7 +57,7 @@ import javafx.util.Callback;
  * Permite crear, actualizar y eliminar usuarios
  */
 @Controller
-public class UserController implements Initializable {
+public class UserController extends BaseMenuController implements Initializable {
 
 	@FXML
 	private Label userId;
@@ -148,13 +148,16 @@ public class UserController implements Initializable {
 
 	private ObservableList<String> roles = FXCollections.observableArrayList();
 
+	@Override
 	@FXML
-	private void exit(ActionEvent event) {
-		Platform.exit();
+	protected void exit(ActionEvent event) {
+		super.exit(event);
 	}
 
+	@Override
 	@FXML
-	private void logout(ActionEvent event) throws IOException {
+	protected void logout(ActionEvent event) {
+		stageManager.clearCurrentUser();
 		stageManager.switchScene(FxmlView.LOGIN);
 	}
 
@@ -163,8 +166,9 @@ public class UserController implements Initializable {
 		stageManager.switchScene(FxmlView.MENU_ADMIN);
 	}
 
+	@Override
 	@FXML
-	private void acercaDe(ActionEvent event) {
+	protected void acercaDe(ActionEvent event) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Acerca de");
 		alert.setHeaderText("Sistema de Gestión FE");
@@ -210,16 +214,21 @@ public class UserController implements Initializable {
 				}
 			} else {
 				// Actualizar usuario existente
-				User user = userService.find(Long.parseLong(userId.getText()));
-				user.setFirstName(getFirstName());
-				user.setLastName(getLastName());
-				user.setDob(getDob());
-				user.setGender(getGender());
+				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
+						&& emptyValidation("Contraseña", getPassword().isEmpty())) {
+					User user = userService.find(Long.parseLong(userId.getText()));
+					user.setFirstName(getFirstName());
+					user.setLastName(getLastName());
+					user.setDob(getDob());
+					user.setGender(getGender());
+					user.setEmail(getEmail());
+					user.setPassword(getPassword());
 
-				applyRoleSpecificFields(user);
-				
-				User updatedUser = userService.update(user);
-				updateAlert(updatedUser);
+					applyRoleSpecificFields(user);
+					
+					User updatedUser = userService.update(user);
+					updateAlert(updatedUser);
+				}
 			}
 
 			clearFields();
@@ -442,10 +451,11 @@ public class UserController implements Initializable {
 					}
 					cbRole.getSelectionModel().select(user.getRole());
 					email.setText(user.getEmail());
+					password.setText(user.getPassword() != null ? user.getPassword() : "");
 
 					cbRole.setDisable(true);
-					email.setDisable(true);
-					password.setDisable(true);
+					email.setDisable(false);
+					password.setDisable(false);
 
 					if (user instanceof Profesor) {
 						Profesor profesor = (Profesor) user;
