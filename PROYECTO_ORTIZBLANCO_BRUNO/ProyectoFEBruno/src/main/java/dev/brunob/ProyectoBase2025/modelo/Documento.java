@@ -1,5 +1,7 @@
 package dev.brunob.ProyectoBase2025.modelo;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +29,15 @@ public class Documento {
 
     private String tipo;
 
+    @Column(length = 1000)
     private String ruta;
+
+    @Column(name = "fecha_subida")
+    private LocalDate fechaSubida;
+
+    @ManyToOne
+    @JoinColumn(name = "subido_por")
+    private User subidoPor;
 
     @ManyToOne
     @JoinColumn(name = "formacion_empresa_id")
@@ -66,6 +76,22 @@ public class Documento {
 
     public void setRuta(String ruta) {
         this.ruta = ruta;
+    }
+
+    public LocalDate getFechaSubida() {
+        return fechaSubida;
+    }
+
+    public void setFechaSubida(LocalDate fechaSubida) {
+        this.fechaSubida = fechaSubida;
+    }
+
+    public User getSubidoPor() {
+        return subidoPor;
+    }
+
+    public void setSubidoPor(User subidoPor) {
+        this.subidoPor = subidoPor;
     }
 
     public FormacionEmpresa getFormacionEmpresa() {

@@ -35,6 +35,9 @@ public class FormacionEmpresa {
 
     private String estado;
 
+    @Column(name = "motivo_cambio", length = 1000)
+    private String motivoCambio;
+
     @ManyToOne
     @JoinColumn(name = "estudiante_id")
     private Estudiante estudiante;
@@ -87,6 +90,14 @@ public class FormacionEmpresa {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getMotivoCambio() {
+        return motivoCambio;
+    }
+
+    public void setMotivoCambio(String motivoCambio) {
+        this.motivoCambio = motivoCambio;
     }
 
     public Estudiante getEstudiante() {
