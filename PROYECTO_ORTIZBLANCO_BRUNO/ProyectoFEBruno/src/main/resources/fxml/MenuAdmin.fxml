@@ -46,6 +46,7 @@
                     </Menu>
                     <Menu text="Ayuda">
                         <items>
+                            <MenuItem text="Ayuda" accelerator="F1" onAction="#mostrarAyuda"/>
                             <MenuItem text="Acerca de" onAction="#acercaDe"/>
                         </items>
                     </Menu>
