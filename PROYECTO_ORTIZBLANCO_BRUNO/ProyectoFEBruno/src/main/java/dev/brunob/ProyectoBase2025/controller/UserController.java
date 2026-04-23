@@ -15,11 +15,15 @@ import org.springframework.stereotype.Controller;
 
 import dev.brunob.ProyectoBase2025.config.StageManager;
 import dev.brunob.ProyectoBase2025.modelo.Administrador;
+import dev.brunob.ProyectoBase2025.modelo.Empresa;
+import dev.brunob.ProyectoBase2025.modelo.Curso;
 import dev.brunob.ProyectoBase2025.modelo.Estudiante;
 import dev.brunob.ProyectoBase2025.modelo.Profesor;
 import dev.brunob.ProyectoBase2025.modelo.Role;
 import dev.brunob.ProyectoBase2025.modelo.Tutor;
 import dev.brunob.ProyectoBase2025.modelo.User;
+import dev.brunob.ProyectoBase2025.services.EmpresaService;
+import dev.brunob.ProyectoBase2025.services.CursoService;
 import dev.brunob.ProyectoBase2025.services.UserService;
 import dev.brunob.ProyectoBase2025.view.FxmlView;
 import javafx.application.Platform;
@@ -51,7 +55,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-
+import javafx.util.StringConverter;
 /**
  * Controlador para la gestión de usuarios del sistema
  * Permite crear, actualizar y eliminar usuarios
@@ -108,6 +112,15 @@ public class UserController extends BaseMenuController implements Initializable 
 	private TextField txtTelefono;
 
 	@FXML
+	private ComboBox<Empresa> cbEmpresa;
+
+	@FXML
+	private VBox panelEstudiante;
+
+	@FXML
+	private ComboBox<Curso> cbCurso;
+
+	@FXML
 	private TableView<User> userTable;
 
 	@FXML
@@ -144,9 +157,19 @@ public class UserController extends BaseMenuController implements Initializable 
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private EmpresaService empresaService;
+
+	@Autowired
+	private CursoService cursoService;
+
 	private ObservableList<User> userList = FXCollections.observableArrayList();
 
 	private ObservableList<String> roles = FXCollections.observableArrayList();
+
+	private ObservableList<Empresa> empresas = FXCollections.observableArrayList();
+
+	private ObservableList<Curso> cursos = FXCollections.observableArrayList();
 
 	@Override
 	@FXML
@@ -266,6 +289,10 @@ public class UserController extends BaseMenuController implements Initializable 
 		} else if (user instanceof Tutor) {
 			Tutor tutor = (Tutor) user;
 			tutor.setTelefono(txtTelefono.getText());
+			tutor.setEmpresa(cbEmpresa.getValue());
+		} else if (user instanceof Estudiante) {
+			Estudiante estudiante = (Estudiante) user;
+			estudiante.setCurso(cbCurso.getValue());
 		}
 	}
 
@@ -299,10 +326,16 @@ public class UserController extends BaseMenuController implements Initializable 
 		password.clear();
 		cbCoordinador.setSelected(false);
 		txtTelefono.clear();
+		cbEmpresa.getSelectionModel().clearSelection();
+		cbEmpresa.setValue(null);
+		cbCurso.getSelectionModel().clearSelection();
+		cbCurso.setValue(null);
 		panelProfesor.setVisible(false);
 		panelProfesor.setManaged(false);
 		panelTutor.setVisible(false);
 		panelTutor.setManaged(false);
+		panelEstudiante.setVisible(false);
+		panelEstudiante.setManaged(false);
 
 		cbRole.setDisable(false);
 		email.setDisable(false);
@@ -363,6 +396,26 @@ public class UserController extends BaseMenuController implements Initializable 
 		}
 		cbRole.setItems(roles);
 
+		cbEmpresa.setItems(empresas);
+		cbEmpresa.setConverter(new StringConverter<Empresa>() {
+			@Override public String toString(Empresa e) {
+				return e == null ? "" : (e.getNombre() != null ? e.getNombre() : ("Empresa " + e.getIdEmpresa()));
+			}
+			@Override public Empresa fromString(String s) { return null; }
+		});
+		loadEmpresas();
+
+		cbCurso.setItems(cursos);
+		cbCurso.setConverter(new StringConverter<Curso>() {
+			@Override public String toString(Curso c) {
+				if (c == null) return "";
+				String n = c.getNombre() != null ? c.getNombre() : ("Curso " + c.getIdCurso());
+				return n + " (" + c.getAnio() + ")";
+			}
+			@Override public Curso fromString(String s) { return null; }
+		});
+		loadCursos();
+
 		// Listener para los campos específicos por rol
 		cbRole.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
 			toggleRoleSpecificFields(newVal);
@@ -373,6 +426,8 @@ public class UserController extends BaseMenuController implements Initializable 
 		panelProfesor.setManaged(false);
 		panelTutor.setVisible(false);
 		panelTutor.setManaged(false);
+		panelEstudiante.setVisible(false);
+		panelEstudiante.setManaged(false);
 
 		userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -387,11 +442,14 @@ public class UserController extends BaseMenuController implements Initializable 
 	private void toggleRoleSpecificFields(String roleName) {
 		boolean isProfesor = Role.PROFESOR_TUTOR.getDisplayName().equals(roleName);
 		boolean isTutor = Role.TUTOR_EMPRESA.getDisplayName().equals(roleName);
+		boolean isEstudiante = Role.ESTUDIANTE.getDisplayName().equals(roleName);
 
 		panelProfesor.setVisible(isProfesor);
 		panelProfesor.setManaged(isProfesor);
 		panelTutor.setVisible(isTutor);
 		panelTutor.setManaged(isTutor);
+		panelEstudiante.setVisible(isEstudiante);
+		panelEstudiante.setManaged(isEstudiante);
 	}
 
 	private void setColumnProperties() {
@@ -463,6 +521,33 @@ public class UserController extends BaseMenuController implements Initializable 
 					} else if (user instanceof Tutor) {
 						Tutor tutor = (Tutor) user;
 						txtTelefono.setText(tutor.getTelefono() != null ? tutor.getTelefono() : "");
+						Empresa empresaActual = tutor.getEmpresa();
+						if (empresaActual != null) {
+							for (Empresa emp : empresas) {
+								if (emp.getIdEmpresa() != null
+										&& emp.getIdEmpresa().equals(empresaActual.getIdEmpresa())) {
+									cbEmpresa.setValue(emp);
+									break;
+								}
+							}
+						} else {
+							cbEmpresa.setValue(null);
+						}
+					} else if (user instanceof Estudiante) {
+						Estudiante estudiante = (Estudiante) user;
+						Curso cursoActual = estudiante.getCurso();
+						if (cursoActual != null) {
+							cbCurso.setValue(null);
+							for (Curso c : cursos) {
+								if (c.getIdCurso() != null
+										&& c.getIdCurso().equals(cursoActual.getIdCurso())) {
+									cbCurso.setValue(c);
+									break;
+								}
+							}
+						} else {
+							cbCurso.setValue(null);
+						}
 					}
 
 					toggleRoleSpecificFields(user.getRole());
@@ -476,6 +561,16 @@ public class UserController extends BaseMenuController implements Initializable 
 		userList.clear();
 		userList.addAll(userService.findAll());
 		userTable.setItems(userList);
+	}
+
+	private void loadEmpresas() {
+		empresas.clear();
+		empresas.addAll(empresaService.findAll());
+	}
+
+	private void loadCursos() {
+		cursos.clear();
+		cursos.addAll(cursoService.findAll());
 	}
 
 	/*

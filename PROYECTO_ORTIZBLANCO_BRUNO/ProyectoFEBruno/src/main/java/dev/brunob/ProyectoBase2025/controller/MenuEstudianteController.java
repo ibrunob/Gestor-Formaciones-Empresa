@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import dev.brunob.ProyectoBase2025.services.UserService;
+import dev.brunob.ProyectoBase2025.view.FxmlView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
@@ -31,12 +32,12 @@ public class MenuEstudianteController extends BaseMenuController implements Init
      */
     @FXML
     public void verInfoPracticas(MouseEvent event) {
-        mostrarNoImplementado("Ver Información de Prácticas");
+        stageManager.switchScene(FxmlView.MI_INFORMACION);
     }
 
     @FXML
     public void verInfoPracticas() {
-        mostrarNoImplementado("Ver Información de Prácticas");
+        stageManager.switchScene(FxmlView.MI_INFORMACION);
     }
 
     /**
@@ -44,12 +45,12 @@ public class MenuEstudianteController extends BaseMenuController implements Init
      */
     @FXML
     public void verEmpresa(MouseEvent event) {
-        mostrarNoImplementado("Ver Mi Empresa");
+        stageManager.switchScene(FxmlView.MI_INFORMACION);
     }
 
     @FXML
     public void verEmpresa() {
-        mostrarNoImplementado("Ver Mi Empresa");
+        stageManager.switchScene(FxmlView.MI_INFORMACION);
     }
 
     /**
@@ -57,12 +58,12 @@ public class MenuEstudianteController extends BaseMenuController implements Init
      */
     @FXML
     public void verTutor(MouseEvent event) {
-        mostrarNoImplementado("Ver Mi Tutor");
+        stageManager.switchScene(FxmlView.MI_INFORMACION);
     }
 
     @FXML
     public void verTutor() {
-        mostrarNoImplementado("Ver Mi Tutor");
+        stageManager.switchScene(FxmlView.MI_INFORMACION);
     }
 
     /**
@@ -96,6 +97,11 @@ public class MenuEstudianteController extends BaseMenuController implements Init
      */
     @FXML
     public void gestionDocumentos(MouseEvent event) {
-        mostrarNoImplementado("Mis Documentos");
+        stageManager.switchScene(FxmlView.DOCUMENTOS);
+    }
+
+    @FXML
+    public void gestionDocumentos() {
+        stageManager.switchScene(FxmlView.DOCUMENTOS);
     }
 }

@@ -58,12 +58,12 @@ public class MenuTutorEmpresaController extends BaseMenuController implements In
      */
     @FXML
     public void evaluarDesempeno(MouseEvent event) {
-        mostrarNoImplementado("Evaluar Desempeño");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.EVALUACIONES);
     }
 
     @FXML
     public void evaluarDesempeno() {
-        mostrarNoImplementado("Evaluar Desempeño");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.EVALUACIONES);
     }
 
     /**
@@ -97,6 +97,11 @@ public class MenuTutorEmpresaController extends BaseMenuController implements In
      */
     @FXML
     public void gestionDocumentos(MouseEvent event) {
-        mostrarNoImplementado("Gestión Documental");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.DOCUMENTOS);
+    }
+
+    @FXML
+    public void gestionDocumentos() {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.DOCUMENTOS);
     }
 }

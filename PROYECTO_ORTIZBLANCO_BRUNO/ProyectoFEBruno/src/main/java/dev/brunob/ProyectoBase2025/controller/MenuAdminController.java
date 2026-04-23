@@ -46,12 +46,12 @@ public class MenuAdminController extends BaseMenuController implements Initializ
      */
     @FXML
     public void gestionEmpresas(MouseEvent event) {
-        mostrarNoImplementado("Gestión de Empresas");
+        stageManager.switchScene(FxmlView.EMPRESA);
     }
 
     @FXML
     public void gestionEmpresas() {
-        mostrarNoImplementado("Gestión de Empresas");
+        stageManager.switchScene(FxmlView.EMPRESA);
     }
 
     /**
@@ -59,12 +59,25 @@ public class MenuAdminController extends BaseMenuController implements Initializ
      */
     @FXML
     public void gestionEstudiantes(MouseEvent event) {
-        mostrarNoImplementado("Gestión de Estudiantes");
+        stageManager.switchScene(FxmlView.ASIGNACIONES);
     }
 
     @FXML
     public void gestionEstudiantes() {
-        mostrarNoImplementado("Gestión de Estudiantes");
+        stageManager.switchScene(FxmlView.ASIGNACIONES);
+    }
+
+    /**
+     * Abrir la pantalla de asignaciones de estudiantes (alias)
+     */
+    @FXML
+    public void gestionAsignaciones(MouseEvent event) {
+        stageManager.switchScene(FxmlView.ASIGNACIONES);
+    }
+
+    @FXML
+    public void gestionAsignaciones() {
+        stageManager.switchScene(FxmlView.ASIGNACIONES);
     }
 
     /**
@@ -85,12 +98,12 @@ public class MenuAdminController extends BaseMenuController implements Initializ
      */
     @FXML
     public void generarInformes(MouseEvent event) {
-        mostrarNoImplementado("Generación de Informes");
+        stageManager.switchScene(FxmlView.INFORMES);
     }
 
     @FXML
     public void generarInformes() {
-        mostrarNoImplementado("Generación de Informes");
+        stageManager.switchScene(FxmlView.INFORMES);
     }
 
     /**
@@ -98,6 +111,24 @@ public class MenuAdminController extends BaseMenuController implements Initializ
      */
     @FXML
     public void gestionDocumentos(MouseEvent event) {
-        mostrarNoImplementado("Gestión Documental");
+        stageManager.switchScene(FxmlView.DOCUMENTOS);
+    }
+
+    @FXML
+    public void gestionDocumentos() {
+        stageManager.switchScene(FxmlView.DOCUMENTOS);
+    }
+
+    /**
+     * Abrir la gestion de formaciones en empresa
+     */
+    @FXML
+    public void gestionFormaciones(MouseEvent event) {
+        stageManager.switchScene(FxmlView.FORMACION);
+    }
+
+    @FXML
+    public void gestionFormaciones() {
+        stageManager.switchScene(FxmlView.FORMACION);
     }
 }

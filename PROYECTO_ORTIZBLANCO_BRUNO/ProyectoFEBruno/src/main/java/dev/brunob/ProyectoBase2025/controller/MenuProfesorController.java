@@ -27,16 +27,29 @@ public class MenuProfesorController extends BaseMenuController implements Initia
     }
 
     /**
-     * Ver estudiantes del tutor
+     * Ver estudiantes del tutor → pantalla de asignaciones
      */
     @FXML
     public void verEstudiantes(MouseEvent event) {
-        mostrarNoImplementado("Ver Estudiantes");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ASIGNACIONES);
     }
 
     @FXML
     public void verEstudiantes() {
-        mostrarNoImplementado("Ver Estudiantes");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ASIGNACIONES);
+    }
+
+    /**
+     * Gestionar asignaciones de estudiantes (coordinador)
+     */
+    @FXML
+    public void gestionAsignaciones(MouseEvent event) {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ASIGNACIONES);
+    }
+
+    @FXML
+    public void gestionAsignaciones() {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ASIGNACIONES);
     }
 
     /**
@@ -44,12 +57,12 @@ public class MenuProfesorController extends BaseMenuController implements Initia
      */
     @FXML
     public void seguimientoFE(MouseEvent event) {
-        mostrarNoImplementado("Seguimiento FE");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.EVALUACIONES);
     }
 
     @FXML
     public void seguimientoFE() {
-        mostrarNoImplementado("Seguimiento FE");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.EVALUACIONES);
     }
 
     /**
@@ -104,6 +117,37 @@ public class MenuProfesorController extends BaseMenuController implements Initia
      */
     @FXML
     public void gestionDocumentos(MouseEvent event) {
-        mostrarNoImplementado("Gestión Documental");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.DOCUMENTOS);
+    }
+
+    @FXML
+    public void gestionDocumentos() {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.DOCUMENTOS);
+    }
+
+    /**
+     * Generar informes de las formaciones bajo su tutela.
+     */
+    @FXML
+    public void generarInformes(MouseEvent event) {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.INFORMES);
+    }
+
+    @FXML
+    public void generarInformes() {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.INFORMES);
+    }
+
+    /**
+     * Abrir la gestion de formaciones en empresa
+     */
+    @FXML
+    public void gestionFormaciones(MouseEvent event) {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.FORMACION);
+    }
+
+    @FXML
+    public void gestionFormaciones() {
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.FORMACION);
     }
 }
