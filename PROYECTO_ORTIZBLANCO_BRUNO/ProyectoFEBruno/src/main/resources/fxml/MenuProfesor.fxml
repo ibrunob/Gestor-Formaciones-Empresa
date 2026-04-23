@@ -32,7 +32,9 @@
                     <Menu text="Estudiantes">
                         <items>
                             <MenuItem text="Ver mis estudiantes" onAction="#verEstudiantes"/>
+                            <MenuItem text="Asignar estudiantes a empresa" onAction="#gestionAsignaciones"/>
                             <MenuItem text="Seguimiento FE" onAction="#seguimientoFE"/>
+                            <MenuItem text="Gestionar Formaciones" onAction="#gestionFormaciones"/>
                         </items>
                     </Menu>
                     <Menu text="Empresas">
@@ -45,6 +47,11 @@
                         <items>
                             <MenuItem text="Calificar estudiantes" onAction="#calificarEstudiantes"/>
                             <MenuItem text="Registrar asistencia" onAction="#registrarAsistencia"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Informes">
+                        <items>
+                            <MenuItem text="Generar Informes" onAction="#generarInformes"/>
                         </items>
                     </Menu>
                     <Menu text="Ayuda">
@@ -90,18 +97,18 @@
             <GridPane hgap="40.0" vgap="40.0" alignment="CENTER">
                 <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0" 
                       GridPane.columnIndex="0" GridPane.rowIndex="0"
-                      onMouseClicked="#verEstudiantes">
+                      onMouseClicked="#gestionAsignaciones">
                     <Label text="🎓" style="-fx-font-size: 48px;"/>
-                    <Label text="Mis Estudiantes" styleClass="card-title"/>
-                    <Label text="Ver estudiantes asignados" styleClass="card-description"/>
+                    <Label text="Asignaciones" styleClass="card-title"/>
+                    <Label text="Asignar estudiantes a empresa" styleClass="card-description"/>
                 </VBox>
                 
                 <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
                       GridPane.columnIndex="1" GridPane.rowIndex="0"
-                      onMouseClicked="#seguimientoFE">
-                    <Label text="📋" style="-fx-font-size: 48px;"/>
-                    <Label text="Seguimiento FE" styleClass="card-title"/>
-                    <Label text="Control de prácticas" styleClass="card-description"/>
+                      onMouseClicked="#gestionFormaciones">
+                    <Label text="🤝" style="-fx-font-size: 48px;"/>
+                    <Label text="Gestionar Formaciones" styleClass="card-title"/>
+                    <Label text="Crear, modificar o eliminar FE" styleClass="card-description"/>
                 </VBox>
                 
                 <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"

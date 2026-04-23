@@ -119,6 +119,15 @@
                   style="-fx-background-color: #f0fff0; -fx-background-radius: 8px; -fx-padding: 10;">
                <Label text="Campos de Tutor" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
                <TextField fx:id="txtTelefono" promptText="Teléfono"/>
+               <Label text="Empresa" style="-fx-font-size: 12px; -fx-text-fill: #27ae60;"/>
+               <ComboBox fx:id="cbEmpresa" promptText="Seleccionar Empresa" maxWidth="1.7976931348623157E308"/>
+            </VBox>
+
+            <VBox fx:id="panelEstudiante" spacing="8.0" visible="false" managed="false"
+                  style="-fx-background-color: #fff7e6; -fx-background-radius: 8px; -fx-padding: 10;">
+               <Label text="Campos de Estudiante" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #d68910;"/>
+               <Label text="Curso" style="-fx-font-size: 12px; -fx-text-fill: #d68910;"/>
+               <ComboBox fx:id="cbCurso" promptText="Seleccionar Curso" maxWidth="1.7976931348623157E308"/>
             </VBox>
             
             <HBox alignment="CENTER_RIGHT" spacing="10.0">
