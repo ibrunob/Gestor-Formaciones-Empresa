@@ -21,6 +21,10 @@ import javafx.scene.input.MouseEvent;
 @Controller
 public class MenuAdminController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "menu-admin.html"; }
+
+
     @Autowired
     private UserService userService;
 

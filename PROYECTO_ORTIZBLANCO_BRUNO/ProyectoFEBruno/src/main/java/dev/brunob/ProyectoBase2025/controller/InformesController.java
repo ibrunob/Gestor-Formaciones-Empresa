@@ -60,6 +60,10 @@ import javafx.stage.FileChooser;
 @Controller
 public class InformesController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "informes.html"; }
+
+
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String TODOS = "__TODOS__";
 

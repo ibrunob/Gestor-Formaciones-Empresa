@@ -20,6 +20,10 @@ import javafx.scene.input.MouseEvent;
 @Controller
 public class MenuTutorEmpresaController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "menu-tutor.html"; }
+
+
     @Autowired
     private UserService userService;
 

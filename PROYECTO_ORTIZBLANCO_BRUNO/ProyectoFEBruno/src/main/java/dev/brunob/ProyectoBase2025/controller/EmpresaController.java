@@ -42,6 +42,10 @@ import javafx.util.Callback;
 @Controller
 public class EmpresaController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "empresa.html"; }
+
+
     @FXML private Label empresaId;
     @FXML private TextField txtNombre;
     @FXML private TextField txtDireccion;

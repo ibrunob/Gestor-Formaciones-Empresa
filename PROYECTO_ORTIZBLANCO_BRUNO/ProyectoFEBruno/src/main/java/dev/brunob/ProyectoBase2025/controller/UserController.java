@@ -63,6 +63,10 @@ import javafx.util.StringConverter;
 @Controller
 public class UserController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "user.html"; }
+
+
 	@FXML
 	private Label userId;
 

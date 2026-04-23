@@ -42,6 +42,10 @@ import javafx.scene.control.TableView;
 @Controller
 public class MiInformacionController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "mi-informacion.html"; }
+
+
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @FXML private Label lblNombre;

@@ -55,6 +55,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 @Controller
 public class EvaluacionController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "evaluaciones.html"; }
+
+
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final ObservableList<Integer> ESCALA = FXCollections.observableArrayList(1, 2, 3, 4, 5);
 

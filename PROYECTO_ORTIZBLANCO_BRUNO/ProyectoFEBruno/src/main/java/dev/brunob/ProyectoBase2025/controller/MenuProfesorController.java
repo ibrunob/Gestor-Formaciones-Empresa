@@ -19,6 +19,10 @@ import javafx.scene.input.MouseEvent;
 @Controller
 public class MenuProfesorController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "menu-profesor.html"; }
+
+
     @Autowired
     private UserService userService;
 

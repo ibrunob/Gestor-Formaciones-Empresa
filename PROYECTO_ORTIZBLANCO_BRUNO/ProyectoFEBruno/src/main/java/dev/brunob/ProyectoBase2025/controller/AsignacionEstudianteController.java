@@ -61,6 +61,10 @@ import javafx.util.StringConverter;
 @Controller
 public class AsignacionEstudianteController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "asignaciones.html"; }
+
+
     private static final List<String> ESTADOS = List.of("Pendiente", "En curso", "Finalizada", "Cancelada");
     private static final String CURSO_TODOS = "__TODOS__";
 

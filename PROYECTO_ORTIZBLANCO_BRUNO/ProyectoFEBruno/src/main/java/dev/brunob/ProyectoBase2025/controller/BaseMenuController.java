@@ -9,9 +9,13 @@ import dev.brunob.ProyectoBase2025.view.FxmlView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * Controlador que da funcionalidades comunes
@@ -95,5 +99,48 @@ public abstract class BaseMenuController {
     @FXML
     protected void gestionDocumentos() {
         mostrarNoImplementado("Gestión Documental");
+    }
+
+    /**
+     * Devuelve el nombre del archivo HTML de ayuda contextual a mostrar
+     * para esta pantalla. Cada controlador puede sobreescribirlo.
+     * Por defecto se muestra el índice general.
+     */
+    protected String getPaginaAyuda() {
+        return "index.html";
+    }
+
+    /**
+     * Abre la ventana de ayuda con el contenido HTML de la pantalla actual.
+     * Asociado en los menús al elemento "Ayuda" con el acelerador F1.
+     */
+    @FXML
+    protected void mostrarAyuda(ActionEvent event) {
+        abrirAyuda(getPaginaAyuda());
+    }
+
+    /**
+     * Carga el HTML indicado en un WebView y lo muestra en una nueva ventana.
+     */
+    private void abrirAyuda(String pagina) {
+        try {
+            WebView webView = new WebView();
+            String url = getClass().getResource("/ayuda/" + pagina).toExternalForm();
+            webView.getEngine().load(url);
+
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Ayuda");
+            helpStage.setScene(new Scene(webView, 700, 600));
+            helpStage.initModality(Modality.NONE);
+            helpStage.setResizable(true);
+            helpStage.show();
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Archivo de Ayuda no encontrado");
+            alert.setContentText("Por favor, verifica que el archivo '" + pagina +
+                    "' esté en la ruta '/ayuda/' del proyecto.");
+            alert.showAndWait();
+        }
     }
 }

@@ -62,6 +62,10 @@ import javafx.util.StringConverter;
 @Controller
 public class DocumentoController extends BaseMenuController implements Initializable {
 
+    @Override
+    protected String getPaginaAyuda() { return "documentos.html"; }
+
+
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final ObservableList<String> TIPOS_DEFECTO = FXCollections.observableArrayList(
             "Convenio", "Programa formativo", "Informe seguimiento", "Anexo", "Acta",
