@@ -74,7 +74,7 @@
     -fx-text-fill: #ecf0f1;
 }
 
-.btn-logout {
+.button.btn-logout {
     -fx-background-color: #e74c3c;
     -fx-text-fill: white;
     -fx-font-size: 13px;
@@ -84,11 +84,11 @@
     -fx-cursor: hand;
 }
 
-.btn-logout:hover {
+.button.btn-logout:hover {
     -fx-background-color: #c0392b;
 }
 
-.btn-logout:pressed {
+.button.btn-logout:pressed {
     -fx-background-color: #a93226;
 }
 
@@ -265,4 +265,36 @@
 
 .button-warning:hover {
     -fx-background-color: #d68910;
+}
+
+/* Botón informativo / acción neutra (azul claro) */
+.button-info {
+    -fx-background-color: #5dade2;
+}
+
+.button-info:hover {
+    -fx-background-color: #3498db;
+}
+
+.button-info:pressed {
+    -fx-background-color: #2980b9;
+}
+
+/* Botón secundario (gris) - para acciones de navegación como "Volver" */
+.button.btn-secondary {
+    -fx-background-color: #7f8c8d;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.button.btn-secondary:hover {
+    -fx-background-color: #5d6d7e;
+}
+
+.button.btn-secondary:pressed {
+    -fx-background-color: #34495e;
 }

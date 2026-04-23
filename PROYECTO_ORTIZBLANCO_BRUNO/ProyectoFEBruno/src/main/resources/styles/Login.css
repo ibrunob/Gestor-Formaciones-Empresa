@@ -1,6 +1,6 @@
 
 .titleHeader, .subtitleHeader, .mainTitle, .subtitle, .label {
-    -fx-font-family: "Comic Sans MS"; 
+    -fx-font-family: "Segoe UI", "Helvetica", sans-serif;
 }
 
 .titleHeader {

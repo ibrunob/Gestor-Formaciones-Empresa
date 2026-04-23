@@ -57,7 +57,7 @@
                   <Label fx:id="lblUserInfo" text="Usuario: " styleClass="subtitle-header"/>
                </VBox>
                <HBox HBox.hgrow="ALWAYS"/>
-               <Button text="Volver al Menú" onAction="#volverMenu" styleClass="btn-logout"/>
+               <Button text="Volver al Menú" onAction="#volverMenu" styleClass="btn-secondary"/>
             </children>
          </HBox>
       </VBox>
