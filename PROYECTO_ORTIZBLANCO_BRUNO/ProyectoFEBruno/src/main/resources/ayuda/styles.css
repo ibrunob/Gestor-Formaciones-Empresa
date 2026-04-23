@@ -1,0 +1,16 @@
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 24px 32px;
+  color: #2c3e50;
+  line-height: 1.5;
+}
+h1 { color: #1a3d6d; border-bottom: 2px solid #1a3d6d; padding-bottom: 6px; }
+h2 { color: #1a3d6d; margin-top: 24px; }
+a { color: #2980b9; text-decoration: underline; }
+a:hover { color: #1a3d6d; }
+ul { padding-left: 22px; }
+.nav { margin-top: 28px; padding-top: 12px; border-top: 1px solid #bdc3c7; font-size: 0.95em; }
+code, kbd {
+  background: #ecf0f1; padding: 1px 6px; border-radius: 3px;
+  font-family: Consolas, monospace;
+}
