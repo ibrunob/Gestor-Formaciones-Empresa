@@ -29,21 +29,94 @@ public abstract class BaseMenuController {
     @Autowired
     protected StageManager stageManager;
 
+    /**
+     * Etiqueta de información del usuario embebida directamente en pantallas
+     * que aún no usan el componente reutilizable {@code AppHeader.fxml}
+     * (por ejemplo los menús principales de cada rol).
+     */
     @FXML
     protected Label lblUserInfo;
+
+    /**
+     * Controlador del componente reutilizable {@code AppHeader.fxml}.
+     * Se inyecta automáticamente cuando la vista incluye la cabecera
+     * mediante {@code <fx:include source="AppHeader.fxml" fx:id="appHeader"/>}.
+     */
+    @FXML
+    protected AppHeaderController appHeaderController;
 
     protected User currentUser;
 
     /**
-     * Establece el usuario actual y actualiza la interfaz. TODO: Fix No muestra el nombre
+     * Establece el usuario actual y actualiza la interfaz, tanto si la pantalla
+     * usa el componente reutilizable {@link AppHeaderController} como si tiene
+     * la etiqueta {@code lblUserInfo} embebida.
      * 
      * @param user El usuario logueado
      */
     public void setCurrentUser(User user) {
         this.currentUser = user;
-        if (lblUserInfo != null && user != null) {
-            lblUserInfo.setText("Usuario: " + user.getFirstName() + " " + 
-                (user.getLastName() != null ? user.getLastName() : ""));
+        if (user == null) {
+            return;
+        }
+        String info = "Usuario: " + user.getFirstName() + " " +
+                (user.getLastName() != null ? user.getLastName() : "");
+        if (appHeaderController != null) {
+            appHeaderController.setUserInfo(info);
+        }
+        if (lblUserInfo != null) {
+            lblUserInfo.setText(info);
+        }
+    }
+
+    /**
+     * Configura el componente {@link AppHeaderController} (si está presente)
+     * con el título de la pantalla y un botón de acción primaria que vuelve
+     * al menú correspondiente al rol actual.
+     *
+     * <p>Las vistas internas deben llamar a este método desde su
+     * {@code initialize(...)} para mantener consistente la posición y el
+     * comportamiento de la cabecera en todas las pantallas.</p>
+     *
+     * @param titulo Título a mostrar en la cabecera.
+     */
+    protected void initHeader(String titulo) {
+        if (appHeaderController == null) {
+            return;
+        }
+        appHeaderController.setTitulo(titulo);
+        appHeaderController.setAccion("Volver al Menú", e -> volverAlMenuPorRol());
+    }
+
+    /**
+     * Acción "volver al menú" del componente cabecera.
+     *
+     * <p>Vuelve al menú correspondiente al rol del usuario actual. Tiene un
+     * nombre distinto del manejador {@code #volverMenu} usado en algunos
+     * FXML para no colisionar con métodos privados ya existentes en los
+     * controladores hijos.</p>
+     */
+    protected void volverAlMenuPorRol() {
+        if (currentUser == null || currentUser.getRole() == null) {
+            stageManager.switchScene(FxmlView.LOGIN);
+            return;
+        }
+        // Resolvemos el destino tanto si el campo `role` guarda el displayName
+        // ("Profesor/Tutor", "Tutor de Empresa"...) como si llega como
+        // identificador interno ("Profesor", "Tutor", "Estudiante",
+        // "Administrador"). Cualquier otro valor se trata como administrador
+        // por seguridad para no devolver al usuario al login.
+        String role = currentUser.getRole().trim().toLowerCase();
+        switch (role) {
+            case "administrador", "admin"
+                -> stageManager.switchScene(FxmlView.MENU_ADMIN);
+            case "profesor", "profesor/tutor", "tutor docente", "coordinador"
+                -> stageManager.switchScene(FxmlView.MENU_PROFESOR);
+            case "tutor", "tutor de empresa", "tutor_empresa"
+                -> stageManager.switchScene(FxmlView.MENU_TUTOR_EMPRESA);
+            case "estudiante", "alumno"
+                -> stageManager.switchScene(FxmlView.MENU_ESTUDIANTE);
+            default -> stageManager.switchScene(FxmlView.LOGIN);
         }
     }
 
