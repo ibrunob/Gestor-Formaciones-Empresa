@@ -68,7 +68,7 @@ public class MenuAdminController extends BaseMenuController implements Initializ
      */
     @FXML
     public void gestionTutores() {
-        mostrarNoImplementado("Gestión de Tutores");
+        stageManager.switchScene(FxmlView.TUTORES);
     }
 
     /**

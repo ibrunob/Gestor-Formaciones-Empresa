@@ -35,7 +35,7 @@ public class TutorService {
     }
 
     public List<Tutor> findAll() {
-        return tutorRepository.findAll();
+        return tutorRepository.findAllWithEmpresa();
     }
 
     public List<Tutor> findByEmpresa(Long empresaId) {

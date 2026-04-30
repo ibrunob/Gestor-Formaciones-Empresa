@@ -58,7 +58,7 @@ public class MenuProfesorController extends BaseMenuController implements Initia
      */
     @FXML
     public void verEmpresas() {
-        mostrarNoImplementado("Ver Empresas");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.EMPRESAS_PROFESOR);
     }
 
     /**
@@ -74,7 +74,7 @@ public class MenuProfesorController extends BaseMenuController implements Initia
      */
     @FXML
     public void calificarEstudiantes() {
-        mostrarNoImplementado("Calificar Estudiantes");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.EVALUACIONES);
     }
 
     /**
@@ -82,7 +82,7 @@ public class MenuProfesorController extends BaseMenuController implements Initia
      */
     @FXML
     public void registrarAsistencia() {
-        mostrarNoImplementado("Registrar Asistencia");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ASISTENCIA);
     }
 
     /**

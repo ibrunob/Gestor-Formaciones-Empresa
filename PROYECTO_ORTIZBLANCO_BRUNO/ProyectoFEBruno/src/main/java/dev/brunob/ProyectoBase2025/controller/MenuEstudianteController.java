@@ -59,7 +59,7 @@ public class MenuEstudianteController extends BaseMenuController implements Init
      */
     @FXML
     public void verAsistencia() {
-        mostrarNoImplementado("Ver Mi Asistencia");
+        stageManager.switchScene(FxmlView.MI_ASISTENCIA);
     }
 
     /**
@@ -67,7 +67,7 @@ public class MenuEstudianteController extends BaseMenuController implements Init
      */
     @FXML
     public void justificarFalta() {
-        mostrarNoImplementado("Justificar Falta");
+        stageManager.switchScene(FxmlView.MI_ASISTENCIA);
     }
 
     /**

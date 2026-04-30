@@ -35,7 +35,7 @@ public class MenuTutorEmpresaController extends BaseMenuController implements In
      */
     @FXML
     public void verEstudiantes() {
-        mostrarNoImplementado("Ver Estudiantes Asignados");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ESTUDIANTES_TUTOR);
     }
 
     /**
@@ -43,7 +43,7 @@ public class MenuTutorEmpresaController extends BaseMenuController implements In
      */
     @FXML
     public void registrarAsistencia() {
-        mostrarNoImplementado("Registrar Asistencia");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ASISTENCIA);
     }
 
     /**
@@ -59,7 +59,7 @@ public class MenuTutorEmpresaController extends BaseMenuController implements In
      */
     @FXML
     public void verHistorialAsistencia() {
-        mostrarNoImplementado("Ver Historial de Asistencia");
+        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.ASISTENCIA);
     }
 
     /**
