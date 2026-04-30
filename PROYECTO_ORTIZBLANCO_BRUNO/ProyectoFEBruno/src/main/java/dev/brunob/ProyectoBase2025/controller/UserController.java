@@ -190,7 +190,7 @@ public class UserController extends BaseMenuController implements Initializable 
 
 	@FXML
 	private void volverMenu(ActionEvent event) throws IOException {
-		stageManager.switchScene(FxmlView.MENU_ADMIN);
+		volverAlMenuPorRol();
 	}
 
 	@Override
@@ -394,6 +394,7 @@ public class UserController extends BaseMenuController implements Initializable 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		initHeader("Gestión de Usuarios");
 		roles.clear();
 		for (Role role : Role.values()) {
 			roles.add(role.getDisplayName());

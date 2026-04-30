@@ -153,14 +153,7 @@ public class FormacionEmpresaController extends BaseMenuController implements In
 
     @FXML
     private void volverMenu(ActionEvent event) {
-        stageManager.switchScene(targetMenu());
-    }
-
-    private FxmlView targetMenu() {
-        if (currentUser instanceof Profesor) {
-            return FxmlView.MENU_PROFESOR;
-        }
-        return FxmlView.MENU_ADMIN;
+        volverAlMenuPorRol();
     }
 
     @Override
@@ -300,6 +293,7 @@ public class FormacionEmpresaController extends BaseMenuController implements In
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initHeader("Gestión de Formación en Empresa");
         cbEstudiante.setItems(estudiantes);
         cbProfesor.setItems(profesores);
         cbTutor.setItems(tutores);

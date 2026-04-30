@@ -87,6 +87,7 @@ public class MiInformacionController extends BaseMenuController implements Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initHeader("Mi Información");
         colDocNombre.setCellValueFactory(c -> str(c.getValue().getNombre()));
         colDocTipo.setCellValueFactory(c -> str(c.getValue().getTipo()));
         colDocFecha.setCellValueFactory(c -> str(c.getValue().getFechaSubida() != null

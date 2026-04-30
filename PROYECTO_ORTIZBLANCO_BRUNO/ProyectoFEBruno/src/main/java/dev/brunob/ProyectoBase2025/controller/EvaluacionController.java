@@ -108,6 +108,7 @@ public class EvaluacionController extends BaseMenuController implements Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initHeader("Evaluación y Supervisión de Estudiantes");
         colEstId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colEstNombre.setCellValueFactory(c -> new ReadOnlyStringWrapper(
                 nombreCompleto(c.getValue())));
@@ -342,15 +343,7 @@ public class EvaluacionController extends BaseMenuController implements Initiali
 
     @FXML
     private void volverMenu(ActionEvent event) {
-        if (currentUser instanceof Administrador) {
-            stageManager.switchScene(FxmlView.MENU_ADMIN);
-        } else if (currentUser instanceof Profesor) {
-            stageManager.switchScene(FxmlView.MENU_PROFESOR);
-        } else if (currentUser instanceof Tutor) {
-            stageManager.switchScene(FxmlView.MENU_TUTOR_EMPRESA);
-        } else {
-            stageManager.switchScene(FxmlView.LOGIN);
-        }
+        volverAlMenuPorRol();
     }
 
     private String nombreCompleto(User u) {

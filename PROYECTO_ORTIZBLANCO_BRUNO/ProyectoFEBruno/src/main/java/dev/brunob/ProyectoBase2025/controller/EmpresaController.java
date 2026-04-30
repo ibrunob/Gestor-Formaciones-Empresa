@@ -83,7 +83,7 @@ public class EmpresaController extends BaseMenuController implements Initializab
 
     @FXML
     private void volverMenu(ActionEvent event) {
-        stageManager.switchScene(FxmlView.MENU_ADMIN);
+        volverAlMenuPorRol();
     }
 
     @Override
@@ -180,6 +180,7 @@ public class EmpresaController extends BaseMenuController implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initHeader("Gestión de Empresas");
         empresaTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setColumnProperties();
         loadEmpresaDetails();

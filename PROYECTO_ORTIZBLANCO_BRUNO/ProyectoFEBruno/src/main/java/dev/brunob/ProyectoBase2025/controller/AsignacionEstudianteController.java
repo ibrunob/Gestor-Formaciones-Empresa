@@ -136,6 +136,7 @@ public class AsignacionEstudianteController extends BaseMenuController implement
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initHeader("Asignaciones de Estudiantes");
         cbFiltroCurso.setItems(cursos);
         cbEmpresa.setItems(empresas);
         cbTutor.setItems(tutoresFiltrados);
@@ -197,8 +198,10 @@ public class AsignacionEstudianteController extends BaseMenuController implement
     private List<Curso> cursosVisibles() {
         List<Curso> all = cursoService.findAll();
         if (currentUser instanceof Profesor && !(currentUser instanceof Administrador)) {
-            // Profesor coordinador: solo cursos en los que imparte algún módulo
-            Profesor p = (Profesor) profesorService.find(currentUser.getId());
+            // Profesor coordinador: solo cursos en los que imparte algún módulo.
+            // Usamos el método transaccional para inicializar la colección de
+            // módulos (y su curso) y evitar LazyInitializationException.
+            Profesor p = profesorService.findWithModulos(currentUser.getId());
             if (p == null || p.getModulos() == null || p.getModulos().isEmpty()) {
                 return all; // fallback: si no se sabe, dejar todos
             }
@@ -410,7 +413,7 @@ public class AsignacionEstudianteController extends BaseMenuController implement
         f.setMotivoCambio(motivo);
         // Profesor responsable
         if (currentUser instanceof Profesor && !(currentUser instanceof Administrador)) {
-            Profesor p = (Profesor) profesorService.find(currentUser.getId());
+            Profesor p = profesorService.findWithModulos(currentUser.getId());
             f.setProfesor(p);
         } else if (seleccionado.getActual() != null && seleccionado.getActual().getProfesor() != null) {
             f.setProfesor(seleccionado.getActual().getProfesor());
@@ -491,11 +494,7 @@ public class AsignacionEstudianteController extends BaseMenuController implement
 
     @FXML
     private void volverMenu(ActionEvent event) {
-        if (currentUser instanceof Profesor && !(currentUser instanceof Administrador)) {
-            stageManager.switchScene(FxmlView.MENU_PROFESOR);
-        } else {
-            stageManager.switchScene(FxmlView.MENU_ADMIN);
-        }
+        volverAlMenuPorRol();
     }
 
     @Override

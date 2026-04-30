@@ -93,6 +93,7 @@ public class InformesController extends BaseMenuController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initHeader("Informes de Formaciones en Empresa");
         colCurso.setCellValueFactory(c -> str(nombreCurso(c.getValue())));
         colCiclo.setCellValueFactory(c -> str(nombreCiclo(c.getValue())));
         colEstudiante.setCellValueFactory(c -> str(nombreCompleto(c.getValue().getEstudiante())));
@@ -270,9 +271,7 @@ public class InformesController extends BaseMenuController implements Initializa
 
     @FXML
     private void volverMenu(ActionEvent event) {
-        if (currentUser instanceof Administrador) stageManager.switchScene(FxmlView.MENU_ADMIN);
-        else if (currentUser instanceof Profesor) stageManager.switchScene(FxmlView.MENU_PROFESOR);
-        else stageManager.switchScene(FxmlView.LOGIN);
+        volverAlMenuPorRol();
     }
 
     private static String csv(String s) {

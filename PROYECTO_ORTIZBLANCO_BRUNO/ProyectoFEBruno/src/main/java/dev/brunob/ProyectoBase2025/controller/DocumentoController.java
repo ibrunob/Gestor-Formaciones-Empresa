@@ -110,6 +110,7 @@ public class DocumentoController extends BaseMenuController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initHeader("Gestión Documental");
         colId.setCellValueFactory(new PropertyValueFactory<>("idDocumento"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
@@ -381,11 +382,7 @@ public class DocumentoController extends BaseMenuController implements Initializ
 
     @FXML
     private void volverMenu(ActionEvent event) {
-        if (currentUser instanceof Administrador) stageManager.switchScene(FxmlView.MENU_ADMIN);
-        else if (currentUser instanceof Profesor) stageManager.switchScene(FxmlView.MENU_PROFESOR);
-        else if (currentUser instanceof Tutor) stageManager.switchScene(FxmlView.MENU_TUTOR_EMPRESA);
-        else if (currentUser instanceof Estudiante) stageManager.switchScene(FxmlView.MENU_ESTUDIANTE);
-        else stageManager.switchScene(FxmlView.LOGIN);
+        volverAlMenuPorRol();
     }
 
     private String nombreCompleto(User u) {
