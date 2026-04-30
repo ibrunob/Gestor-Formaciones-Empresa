@@ -126,7 +126,7 @@ public class EvaluacionController extends BaseMenuController implements Initiali
         colEvFecha.setCellValueFactory(c -> new ReadOnlyStringWrapper(
                 c.getValue().getFecha() != null ? c.getValue().getFecha().format(FMT) : ""));
         colEvTutor.setCellValueFactory(c -> new ReadOnlyStringWrapper(
-                c.getValue().getTutor() != null ? nombreCompleto(c.getValue().getTutor()) : ""));
+                autor(c.getValue())));
         colEvActitud.setCellValueFactory(new PropertyValueFactory<>("actitud"));
         colEvPuntualidad.setCellValueFactory(new PropertyValueFactory<>("puntualidad"));
         colEvCompetencias.setCellValueFactory(new PropertyValueFactory<>("competencias"));
@@ -153,8 +153,8 @@ public class EvaluacionController extends BaseMenuController implements Initiali
     }
 
     private void configurarPermisos() {
-        soloLectura = !(currentUser instanceof Tutor);
-        // Profesor y Administrador: lectura. Tutor de Empresa: edicion.
+        soloLectura = !(currentUser instanceof Tutor) && !(currentUser instanceof Profesor);
+        // Tutor de Empresa y Profesor: edicion. Administrador: lectura.
         boolean editable = !soloLectura;
         dpFecha.setDisable(!editable);
         cbActitud.setDisable(!editable);
@@ -169,7 +169,7 @@ public class EvaluacionController extends BaseMenuController implements Initiali
         if (currentUser instanceof Tutor) {
             lblScopeInfo.setText("Mostrando los estudiantes asignados a su tutoría.");
         } else if (currentUser instanceof Profesor) {
-            lblScopeInfo.setText("Acceso de solo lectura al historial de evaluaciones.");
+            lblScopeInfo.setText("Puede registrar calificaciones de los estudiantes a su cargo.");
         } else if (currentUser instanceof Administrador) {
             lblScopeInfo.setText("Acceso de solo lectura: todos los estudiantes.");
         } else {
@@ -229,9 +229,10 @@ public class EvaluacionController extends BaseMenuController implements Initiali
         if (ev == null) {
             return;
         }
-        // Solo el tutor autor puede editar / eliminar la suya.
-        boolean esAutor = !soloLectura && currentUser != null && ev.getTutor() != null
-                && ev.getTutor().getId() == currentUser.getId();
+        // Solo el autor (tutor o profesor) puede editar / eliminar la suya.
+        boolean esAutor = !soloLectura && currentUser != null && (
+                (ev.getTutor() != null && ev.getTutor().getId() == currentUser.getId())
+             || (ev.getProfesor() != null && ev.getProfesor().getId() == currentUser.getId()));
         editando = esAutor ? ev : null;
         dpFecha.setValue(ev.getFecha());
         cbActitud.setValue(ev.getActitud());
@@ -280,8 +281,8 @@ public class EvaluacionController extends BaseMenuController implements Initiali
             info("Seleccione un estudiante en la lista de la izquierda.");
             return;
         }
-        if (!(currentUser instanceof Tutor)) {
-            info("Solo el Tutor de Empresa puede registrar evaluaciones.");
+        if (!(currentUser instanceof Tutor) && !(currentUser instanceof Profesor)) {
+            info("Solo el Tutor de Empresa o el Profesor pueden registrar evaluaciones.");
             return;
         }
         if (dpFecha.getValue() == null) {
@@ -290,7 +291,11 @@ public class EvaluacionController extends BaseMenuController implements Initiali
         }
         Evaluacion ev = editando != null ? editando : new Evaluacion();
         ev.setEstudiante(seleccionado);
-        ev.setTutor((Tutor) currentUser);
+        if (currentUser instanceof Tutor) {
+            ev.setTutor((Tutor) currentUser);
+        } else if (currentUser instanceof Profesor) {
+            ev.setProfesor((Profesor) currentUser);
+        }
         ev.setFecha(dpFecha.getValue());
         ev.setActitud(cbActitud.getValue());
         ev.setPuntualidad(cbPuntualidad.getValue());
@@ -351,6 +356,13 @@ public class EvaluacionController extends BaseMenuController implements Initiali
         String fn = u.getFirstName() != null ? u.getFirstName() : "";
         String ln = u.getLastName() != null ? u.getLastName() : "";
         return (fn + " " + ln).trim();
+    }
+
+    private String autor(Evaluacion ev) {
+        if (ev == null) return "";
+        if (ev.getTutor() != null) return nombreCompleto(ev.getTutor()) + " (Tutor)";
+        if (ev.getProfesor() != null) return nombreCompleto(ev.getProfesor()) + " (Profesor)";
+        return "";
     }
 
     private String safeNombreCurso(Estudiante e) {

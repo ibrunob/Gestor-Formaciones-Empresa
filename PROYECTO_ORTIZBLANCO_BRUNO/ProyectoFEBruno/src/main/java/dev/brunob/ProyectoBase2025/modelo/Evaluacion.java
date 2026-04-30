@@ -46,6 +46,10 @@ public class Evaluacion {
     @JoinColumn(name = "tutor_id")
     private Tutor tutor;
 
+    @ManyToOne
+    @JoinColumn(name = "profesor_id")
+    private Profesor profesor;
+
     public Evaluacion() {
     }
 
@@ -75,4 +79,7 @@ public class Evaluacion {
 
     public Tutor getTutor() { return tutor; }
     public void setTutor(Tutor tutor) { this.tutor = tutor; }
+
+    public Profesor getProfesor() { return profesor; }
+    public void setProfesor(Profesor profesor) { this.profesor = profesor; }
 }
