@@ -92,7 +92,12 @@ public class StageManager {
                view == FxmlView.EVALUACIONES ||
                view == FxmlView.DOCUMENTOS ||
                view == FxmlView.MI_INFORMACION ||
-               view == FxmlView.INFORMES;
+               view == FxmlView.INFORMES ||
+               view == FxmlView.TUTORES ||
+               view == FxmlView.EMPRESAS_PROFESOR ||
+               view == FxmlView.ASISTENCIA ||
+               view == FxmlView.MI_ASISTENCIA ||
+               view == FxmlView.ESTUDIANTES_TUTOR;
     }
     
     private Scene prepareScene(Parent rootnode){

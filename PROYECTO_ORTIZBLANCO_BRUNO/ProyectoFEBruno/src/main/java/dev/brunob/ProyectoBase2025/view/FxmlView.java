@@ -144,6 +144,56 @@ public enum FxmlView {
 		public String getFxmlFile() {
 			return "/fxml/Informes.fxml";
 		}
+	},
+	TUTORES {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("tutores.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/Tutores.fxml";
+		}
+	},
+	EMPRESAS_PROFESOR {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("empresas.profesor.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/EmpresasProfesor.fxml";
+		}
+	},
+	ASISTENCIA {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("asistencia.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/Asistencia.fxml";
+		}
+	},
+	MI_ASISTENCIA {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("mi.asistencia.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/MiAsistencia.fxml";
+		}
+	},
+	ESTUDIANTES_TUTOR {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("estudiantes.tutor.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/EstudiantesTutor.fxml";
+		}
 	};
 
 	public abstract String getTitle();
