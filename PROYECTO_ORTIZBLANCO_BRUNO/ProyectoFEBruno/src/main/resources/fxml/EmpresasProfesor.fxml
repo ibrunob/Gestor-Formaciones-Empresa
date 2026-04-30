@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0"
+            xmlns="http://javafx.com/javafx/8.0.72"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dev.brunob.ProyectoBase2025.controller.EmpresasProfesorController"
+            stylesheets="@../styles/Menu.css">
+   <top>
+      <VBox>
+         <MenuBar styleClass="menu-bar">
+            <menus>
+               <Menu text="Archivo">
+                  <items>
+                     <MenuItem text="Volver al Menú" onAction="#volverMenu"/>
+                     <MenuItem text="Cerrar Sesión" onAction="#logout"/>
+                     <MenuItem text="Salir" onAction="#exit"/>
+                  </items>
+               </Menu>
+               <Menu text="Ayuda">
+                  <items>
+                     <MenuItem text="Ayuda" accelerator="F1" onAction="#mostrarAyuda"/>
+                     <MenuItem text="Acerca de" onAction="#acercaDe"/>
+                  </items>
+               </Menu>
+            </menus>
+         </MenuBar>
+
+         <fx:include source="AppHeader.fxml" fx:id="appHeader"/>
+      </VBox>
+   </top>
+
+   <center>
+      <VBox alignment="TOP_CENTER" spacing="15.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+         </padding>
+         <children>
+            <Label text="Empresas con estudiantes a su cargo" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Label fx:id="lblScope" text="" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <TableView fx:id="empresaTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 10px;">
+               <columns>
+                  <TableColumn fx:id="colId" prefWidth="60.0" text="ID"/>
+                  <TableColumn fx:id="colNombre" prefWidth="240.0" text="Empresa"/>
+                  <TableColumn fx:id="colDireccion" prefWidth="280.0" text="Dirección"/>
+                  <TableColumn fx:id="colTutor" prefWidth="220.0" text="Tutor de Empresa"/>
+                  <TableColumn fx:id="colEstudiantes" prefWidth="240.0" text="Estudiantes asignados"/>
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
+
+   <bottom>
+      <fx:include source="AppFooter.fxml"/>
+   </bottom>
+</BorderPane>

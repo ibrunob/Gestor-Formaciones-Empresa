@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0"
+            xmlns="http://javafx.com/javafx/8.0.72"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dev.brunob.ProyectoBase2025.controller.TutorController"
+            stylesheets="@../styles/Menu.css">
+   <top>
+      <VBox>
+         <MenuBar styleClass="menu-bar">
+            <menus>
+               <Menu text="Archivo">
+                  <items>
+                     <MenuItem text="Volver al Menú" onAction="#volverMenu"/>
+                     <MenuItem text="Cerrar Sesión" onAction="#logout"/>
+                     <MenuItem text="Salir" onAction="#exit"/>
+                  </items>
+               </Menu>
+               <Menu text="Edición">
+                  <items>
+                     <MenuItem text="Eliminar Tutor" onAction="#deleteTutores"/>
+                     <MenuItem text="Limpiar Formulario" onAction="#reset"/>
+                  </items>
+               </Menu>
+               <Menu text="Ayuda">
+                  <items>
+                     <MenuItem text="Ayuda" accelerator="F1" onAction="#mostrarAyuda"/>
+                     <MenuItem text="Acerca de" onAction="#acercaDe"/>
+                  </items>
+               </Menu>
+            </menus>
+         </MenuBar>
+
+         <fx:include source="AppHeader.fxml" fx:id="appHeader"/>
+      </VBox>
+   </top>
+   <left>
+      <VBox prefWidth="340.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 3);" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+         </padding>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" top="20.0"/>
+         </BorderPane.margin>
+         <children>
+            <Label text="Datos del Tutor" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+               <VBox.margin>
+                  <Insets bottom="10.0"/>
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="ID Tutor:" style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;"/>
+                  <Label fx:id="tutorId" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+               </children>
+            </HBox>
+
+            <Label text="Nombre" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <TextField fx:id="txtNombre" promptText="Nombre"/>
+
+            <Label text="Apellidos" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <TextField fx:id="txtApellidos" promptText="Apellidos"/>
+
+            <Label text="Email" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <TextField fx:id="txtEmail" promptText="email@empresa.com"/>
+
+            <Label text="Teléfono" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <TextField fx:id="txtTelefono" promptText="Teléfono"/>
+
+            <Label text="Contraseña" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <PasswordField fx:id="txtPassword" promptText="Sólo si se crea o desea cambiarla"/>
+
+            <Label text="Empresa" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <ComboBox fx:id="cmbEmpresa" prefWidth="300.0" promptText="Seleccione empresa"/>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+               <VBox.margin>
+                  <Insets top="10.0"/>
+               </VBox.margin>
+               <children>
+                  <Button fx:id="reset" text="Limpiar" onAction="#reset" styleClass="button-warning"/>
+                  <Button fx:id="saveTutor" text="Guardar" onAction="#saveTutor" styleClass="button-success"/>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <VBox alignment="TOP_CENTER" spacing="15.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+         </padding>
+         <children>
+            <Label text="Lista de Tutores" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <TableView fx:id="tutorTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 10px;">
+               <columns>
+                  <TableColumn fx:id="colId" prefWidth="50.0" text="ID"/>
+                  <TableColumn fx:id="colNombre" prefWidth="110.0" text="Nombre"/>
+                  <TableColumn fx:id="colApellidos" prefWidth="140.0" text="Apellidos"/>
+                  <TableColumn fx:id="colEmail" prefWidth="170.0" text="Email"/>
+                  <TableColumn fx:id="colTelefono" prefWidth="95.0" text="Teléfono"/>
+                  <TableColumn fx:id="colEmpresa" prefWidth="125.0" text="Empresa"/>
+                  <TableColumn fx:id="colEdit" prefWidth="60.0" text="Editar"/>
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+               </columnResizePolicy>
+               <contextMenu>
+                  <ContextMenu>
+                     <items>
+                        <MenuItem fx:id="deleteTutores" onAction="#deleteTutores" text="Eliminar"/>
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
+
+   <bottom>
+      <fx:include source="AppFooter.fxml"/>
+   </bottom>
+</BorderPane>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0"
+            xmlns="http://javafx.com/javafx/8.0.72"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dev.brunob.ProyectoBase2025.controller.MiAsistenciaController"
+            stylesheets="@../styles/Menu.css">
+   <top>
+      <VBox>
+         <MenuBar styleClass="menu-bar">
+            <menus>
+               <Menu text="Archivo">
+                  <items>
+                     <MenuItem text="Volver al Menú" onAction="#volverMenu"/>
+                     <MenuItem text="Cerrar Sesión" onAction="#logout"/>
+                     <MenuItem text="Salir" onAction="#exit"/>
+                  </items>
+               </Menu>
+               <Menu text="Ayuda">
+                  <items>
+                     <MenuItem text="Ayuda" accelerator="F1" onAction="#mostrarAyuda"/>
+                     <MenuItem text="Acerca de" onAction="#acercaDe"/>
+                  </items>
+               </Menu>
+            </menus>
+         </MenuBar>
+
+         <fx:include source="AppHeader.fxml" fx:id="appHeader"/>
+      </VBox>
+   </top>
+
+   <center>
+      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0"/>
+         </padding>
+         <children>
+            <Label text="Mi historial de asistencia" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <HBox spacing="20.0">
+               <children>
+                  <Label fx:id="lblTotal" text="Total: 0" style="-fx-font-size: 12px; -fx-text-fill: #34495e;"/>
+                  <Label fx:id="lblPresentes" text="Presentes: 0" style="-fx-font-size: 12px; -fx-text-fill: #27ae60;"/>
+                  <Label fx:id="lblFaltas" text="Faltas: 0" style="-fx-font-size: 12px; -fx-text-fill: #c0392b;"/>
+                  <Label fx:id="lblJustificadas" text="Justificadas: 0" style="-fx-font-size: 12px; -fx-text-fill: #2980b9;"/>
+               </children>
+            </HBox>
+            <TableView fx:id="historialTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 10px;">
+               <columns>
+                  <TableColumn fx:id="colFecha" prefWidth="120.0" text="Fecha"/>
+                  <TableColumn fx:id="colEstado" prefWidth="120.0" text="Estado"/>
+                  <TableColumn fx:id="colJustificada" prefWidth="120.0" text="Justificada"/>
+                  <TableColumn fx:id="colMotivo" prefWidth="320.0" text="Motivo / Observaciones"/>
+                  <TableColumn fx:id="colAutor" prefWidth="200.0" text="Registrado por"/>
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
+
+   <right>
+      <VBox prefWidth="340.0" spacing="10.0"
+            style="-fx-background-color: white; -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 3);"
+            BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+         </padding>
+         <BorderPane.margin>
+            <Insets bottom="20.0" right="20.0" top="20.0"/>
+         </BorderPane.margin>
+         <children>
+            <Label text="Justificar falta" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Separator/>
+
+            <Label text="Falta seleccionada" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <Label fx:id="lblFaltaSel" text="—" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" wrapText="true"/>
+
+            <Label text="Justificación" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <TextArea fx:id="txtJustificacion" promptText="Explique el motivo y adjunte aclaraciones..."
+                      prefRowCount="10" wrapText="true"/>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+               <VBox.margin>
+                  <Insets top="5.0"/>
+               </VBox.margin>
+               <children>
+                  <Button fx:id="btnLimpiar" text="Limpiar" onAction="#reset" styleClass="button-warning" minWidth="-Infinity"/>
+                  <Button fx:id="btnJustificar" text="Justificar" onAction="#justificar" styleClass="button-success" minWidth="-Infinity"/>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </right>
+
+   <bottom>
+      <fx:include source="AppFooter.fxml"/>
+   </bottom>
+</BorderPane>
