@@ -101,11 +101,4 @@ public class MenuProfesorController extends BaseMenuController implements Initia
         stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.INFORMES);
     }
 
-    /**
-     * Abrir la gestion de formaciones en empresa
-     */
-    @FXML
-    public void gestionFormaciones() {
-        stageManager.switchScene(dev.brunob.ProyectoBase2025.view.FxmlView.FORMACION);
-    }
 }

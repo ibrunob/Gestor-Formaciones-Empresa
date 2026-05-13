@@ -36,7 +36,6 @@
                             <MenuItem text="Asignaciones de Estudiantes" onAction="#gestionAsignaciones"/>
                             <MenuItem text="Estudiantes" onAction="#gestionEstudiantes"/>
                             <MenuItem text="Tutores" onAction="#gestionTutores"/>
-                            <MenuItem text="Formaciones en Empresa" onAction="#gestionFormaciones"/>
                         </items>
                     </Menu>
                     <Menu text="Informes">
@@ -106,7 +105,7 @@
                       GridPane.columnIndex="2" GridPane.rowIndex="0"
                       onMouseClicked="#gestionAsignaciones">
                     <Label text="🎓" style="-fx-font-size: 48px;"/>
-                    <Label text="Asignaciones de Estudiantes" styleClass="card-title"/>
+                    <Label text="Estudiantes" styleClass="card-title"/>
                     <Label text="Asignar estudiantes a empresa y tutor" styleClass="card-description"/>
                 </VBox>
                 
@@ -119,15 +118,7 @@
                 </VBox>
                 
                 <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
-                      GridPane.columnIndex="1" GridPane.rowIndex="1"
-                      onMouseClicked="#gestionFormaciones">
-                    <Label text="🤝" style="-fx-font-size: 48px;"/>
-                    <Label text="Formaciones en Empresa" styleClass="card-title"/>
-                    <Label text="Crear y gestionar las FE" styleClass="card-description"/>
-                </VBox>
-                
-                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
-                      GridPane.columnIndex="2" GridPane.rowIndex="1"
+                        GridPane.columnIndex="1" GridPane.rowIndex="1"
                       onMouseClicked="#gestionDocumentos">
                     <Label text="📁" style="-fx-font-size: 48px;"/>
                     <Label text="Gestión Documental" styleClass="card-title"/>
@@ -135,7 +126,7 @@
                 </VBox>
                 
                 <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
-                      GridPane.columnIndex="0" GridPane.rowIndex="2"
+                        GridPane.columnIndex="2" GridPane.rowIndex="1"
                       onMouseClicked="#generarInformes">
                     <Label text="📊" style="-fx-font-size: 48px;"/>
                     <Label text="Informes" styleClass="card-title"/>

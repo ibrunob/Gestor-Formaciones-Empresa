@@ -34,7 +34,6 @@
                             <MenuItem text="Ver mis estudiantes" onAction="#verEstudiantes"/>
                             <MenuItem text="Asignar estudiantes a empresa" onAction="#gestionAsignaciones"/>
                             <MenuItem text="Seguimiento FE" onAction="#seguimientoFE"/>
-                            <MenuItem text="Gestionar Formaciones" onAction="#gestionFormaciones"/>
                         </items>
                     </Menu>
                     <Menu text="Empresas">
@@ -105,15 +104,7 @@
                 </VBox>
                 
                 <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
-                      GridPane.columnIndex="1" GridPane.rowIndex="0"
-                      onMouseClicked="#gestionFormaciones">
-                    <Label text="🤝" style="-fx-font-size: 48px;"/>
-                    <Label text="Gestionar Formaciones" styleClass="card-title"/>
-                    <Label text="Crear, modificar o eliminar FE" styleClass="card-description"/>
-                </VBox>
-                
-                <VBox styleClass="menu-card" alignment="CENTER" spacing="10.0"
-                      GridPane.columnIndex="2" GridPane.rowIndex="0"
+                        GridPane.columnIndex="1" GridPane.rowIndex="0"
                       onMouseClicked="#verEmpresas">
                     <Label text="🏢" style="-fx-font-size: 48px;"/>
                     <Label text="Empresas" styleClass="card-title"/>

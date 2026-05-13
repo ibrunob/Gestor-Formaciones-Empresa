@@ -87,11 +87,4 @@ public class MenuAdminController extends BaseMenuController implements Initializ
         stageManager.switchScene(FxmlView.DOCUMENTOS);
     }
 
-    /**
-     * Abrir la gestion de formaciones en empresa
-     */
-    @FXML
-    public void gestionFormaciones() {
-        stageManager.switchScene(FxmlView.FORMACION);
-    }
 }
