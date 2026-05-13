@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `ciclo_formativo` (
   `nombre` varchar(255) DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_ciclo`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `ciclo_formativo`
@@ -61,7 +61,9 @@ CREATE TABLE IF NOT EXISTS `ciclo_formativo` (
 INSERT INTO `ciclo_formativo` (`id_ciclo`, `nombre`, `descripcion`) VALUES
 (1, 'Desarrollo de Aplicaciones Web', 'Ciclo formativo de grado superior DAW'),
 (2, 'Desarrollo de Aplicaciones Multiplataforma', 'Ciclo formativo de grado superior DAM'),
-(3, 'Administración de Sistemas Informáticos en Red', 'Ciclo formativo de grado superior ASIR');
+(3, 'Administración de Sistemas Informáticos en Red', 'Ciclo formativo de grado superior ASIR'),
+(4, 'VIFC302', 'Ciclo formativo VIFC302'),
+(5, 'VIFC303', 'Ciclo formativo VIFC303');
 
 -- --------------------------------------------------------
 
@@ -76,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `curso` (
   `ciclo_formativo_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id_curso`),
   KEY `fk_curso_ciclo` (`ciclo_formativo_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `curso`
@@ -85,7 +87,11 @@ CREATE TABLE IF NOT EXISTS `curso` (
 INSERT INTO `curso` (`id_curso`, `nombre`, `anio`, `ciclo_formativo_id`) VALUES
 (1, '2º DAW 2025/2026', 2025, 1),
 (2, '2º DAM 2025/2026', 2025, 2),
-(3, '2º ASIR 2025/2026', 2025, 3);
+(3, '2º ASIR 2025/2026', 2025, 3),
+(4, '1VIFC302', 2025, 4),
+(5, '2VIFC302', 2025, 4),
+(6, '1VIFC303', 2025, 5),
+(7, '2VIFC303', 2025, 5);
 
 -- --------------------------------------------------------
 
@@ -114,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   `nombre` varchar(255) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_empresa`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `empresa`
@@ -122,7 +128,9 @@ CREATE TABLE IF NOT EXISTS `empresa` (
 
 INSERT INTO `empresa` (`id_empresa`, `nombre`, `direccion`) VALUES
 (1, 'Empresa Tecnológica S.L.', 'Calle Principal 10, Gijón'),
-(2, 'Desarrollo Digital S.A.', 'Avenida de la Constitución 25, Oviedo');
+(2, 'Desarrollo Digital S.A.', 'Avenida de la Constitución 25, Oviedo'),
+(3, 'AsturCode Solutions S.L.', 'Calle Uría 18, Oviedo'),
+(4, 'NorteData Innovación S.A.', 'Parque Tecnológico 7, Gijón');
 
 -- --------------------------------------------------------
 
@@ -236,7 +244,9 @@ CREATE TABLE IF NOT EXISTS `tutor` (
 
 INSERT INTO `tutor` (`id`, `telefono`, `empresa_id`) VALUES
 (3, NULL, NULL),
-(6, NULL, NULL);
+(6, NULL, NULL),
+(8, '684111222', 3),
+(9, '684333444', 4);
 
 -- --------------------------------------------------------
 
@@ -256,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `role` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UKob8kqyqqgmefl0aco34akdtpe` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `user`
@@ -269,7 +279,9 @@ INSERT INTO `user` (`id`, `dtype`, `dob`, `email`, `first_name`, `gender`, `last
 (4, 'Estudiante', '2000-03-25', 'estudiante', 'Carlos', 'Masculino', 'Martínez Sánchez', 'estudiante', 'Estudiante'),
 (5, 'Profesor', '1978-11-08', 'profesor2', 'Ana', 'Femenino', 'Pérez González', 'profesor2', 'Profesor/Tutor'),
 (6, 'Tutor', '1985-04-12', 'tutor_empresa2', 'Pedro', 'Masculino', 'López Díaz', 'tutor2', 'Tutor de Empresa'),
-(7, 'Estudiante', '2001-07-30', 'estudiante2', 'Laura', 'Femenino', 'Rodríguez Hernández', 'estudiante2', 'Estudiante');
+(7, 'Estudiante', '2001-07-30', 'estudiante2', 'Laura', 'Femenino', 'Rodríguez Hernández', 'estudiante2', 'Estudiante'),
+(8, 'Tutor', '1988-01-01', 'laura.tutor', 'Laura', 'Femenino', 'Menéndez Álvarez', 'laura123', 'Tutor de Empresa'),
+(9, 'Tutor', '1988-01-01', 'diego.tutor', 'Diego', 'Masculino', 'Suárez Blanco', 'diego123', 'Tutor de Empresa');
 
 --
 -- Restricciones para tablas volcadas
