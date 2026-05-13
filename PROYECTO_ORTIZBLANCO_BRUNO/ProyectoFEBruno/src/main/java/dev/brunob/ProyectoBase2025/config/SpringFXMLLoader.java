@@ -1,10 +1,12 @@
 package dev.brunob.ProyectoBase2025.config;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -30,10 +32,22 @@ public class SpringFXMLLoader {
 
     public FXMLLoader loadFXMLLoader(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setControllerFactory(context::getBean); //Spring now FXML Controller Factory
+        loader.setControllerFactory(this::createController);
         loader.setResources(resourceBundle);
         loader.setLocation(getClass().getResource(fxmlPath));
         loader.load();
         return loader;
+    }
+
+    private Object createController(Class<?> controllerClass) {
+        try {
+            return context.getBean(controllerClass);
+        } catch (NoSuchBeanDefinitionException ex) {
+            try {
+                return controllerClass.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException reflectionEx) {
+                throw new IllegalStateException("No se pudo crear el controlador FXML: " + controllerClass.getName(), reflectionEx);
+            }
+        }
     }
 }

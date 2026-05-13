@@ -75,16 +75,6 @@ public enum FxmlView {
 			return "/fxml/MenuEstudiante.fxml";
 		}
 	},
-	FORMACION {
-		@Override
-		public String getTitle() {
-			return getStringFromResourceBundle("formacion.title");
-		}
-		@Override
-		public String getFxmlFile() {
-			return "/fxml/Formacion.fxml";
-		}
-	},
 	EMPRESA {
 		@Override
 		public String getTitle() {

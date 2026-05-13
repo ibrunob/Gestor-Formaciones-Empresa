@@ -3,6 +3,7 @@ package dev.brunob.ProyectoBase2025.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
+import dev.brunob.componentes.ui.AppHeaderController;
 import dev.brunob.ProyectoBase2025.config.StageManager;
 import dev.brunob.ProyectoBase2025.modelo.User;
 import dev.brunob.ProyectoBase2025.view.FxmlView;
