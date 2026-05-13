@@ -39,7 +39,7 @@
             </menus>
          </MenuBar>
 
-         <fx:include source="AppHeader.fxml" fx:id="appHeader"/>
+         <fx:include source="/dev/brunob/componentes/ui/fxml/AppHeader.fxml" fx:id="appHeader"/>
       </VBox>
    </top>
 
@@ -109,6 +109,7 @@
    </right>
 
    <bottom>
-      <fx:include source="AppFooter.fxml"/>
+      <fx:include source="/dev/brunob/componentes/ui/fxml/AppFooter.fxml"/>
    </bottom>
 </BorderPane>
+
