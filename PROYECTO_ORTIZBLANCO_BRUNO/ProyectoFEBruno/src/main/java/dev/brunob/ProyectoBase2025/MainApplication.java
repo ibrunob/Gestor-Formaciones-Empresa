@@ -7,6 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import dev.brunob.ProyectoBase2025.config.StageManager;
 import dev.brunob.ProyectoBase2025.view.FxmlView;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 @SpringBootApplication
@@ -26,6 +27,7 @@ public class MainApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logoLaboral.jpg")));
 		stageManager = springContext.getBean(StageManager.class, primaryStage);
 		displayInitialScene();
 
