@@ -1,11 +1,17 @@
 package dev.brunob.appfe.ui.auth
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -18,9 +24,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import dev.brunob.appfe.R
 import dev.brunob.appfe.ui.AppViewModel
+import dev.brunob.appfe.ui.theme.DesktopControlShape
+import dev.brunob.appfe.ui.theme.LoginBlueBottom
+import dev.brunob.appfe.ui.theme.LoginBlueTop
+import dev.brunob.appfe.ui.theme.desktopAuthTextFieldColors
+import dev.brunob.appfe.ui.theme.desktopSuccessButtonColors
 
 @Composable
 fun LoginScreen(
@@ -31,19 +46,42 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
+    val fieldModifier = Modifier.widthIn(max = 360.dp).fillMaxWidth()
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Brush.verticalGradient(listOf(LoginBlueTop, LoginBlueBottom)))
+            .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Iniciar sesión", style = MaterialTheme.typography.headlineMedium)
+        Image(
+            painter = painterResource(R.drawable.ic_launcher_logo_foreground),
+            contentDescription = null,
+            modifier = Modifier.size(76.dp)
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            "CIFP La Laboral Gijón",
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.White
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "Iniciar sesión",
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.White
+        )
         Spacer(Modifier.height(24.dp))
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
             label = { Text("Correo electrónico") },
-            singleLine = true
+            singleLine = true,
+            modifier = fieldModifier,
+            shape = DesktopControlShape,
+            colors = desktopAuthTextFieldColors()
         )
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
@@ -51,11 +89,14 @@ fun LoginScreen(
             onValueChange = { password = it },
             label = { Text("Contraseña") },
             singleLine = true,
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = fieldModifier,
+            shape = DesktopControlShape,
+            colors = desktopAuthTextFieldColors()
         )
         if (error != null) {
             Spacer(Modifier.height(8.dp))
-            Text(error!!, color = MaterialTheme.colorScheme.error)
+            Text(error!!, color = Color(0xFFFFCDD2))
         }
         Spacer(Modifier.height(16.dp))
         Button(
@@ -66,8 +107,14 @@ fun LoginScreen(
                         .onFailure { error = it.message }
                 }
             },
-            enabled = email.isNotBlank() && password.isNotBlank()
+            enabled = email.isNotBlank() && password.isNotBlank(),
+            modifier = fieldModifier.height(46.dp),
+            shape = DesktopControlShape,
+            colors = desktopSuccessButtonColors()
         ) { Text("Entrar") }
-        TextButton(onClick = onNavigateRegister) { Text("¿No tienes cuenta? Regístrate") }
+        TextButton(
+            onClick = onNavigateRegister,
+            colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
+        ) { Text("¿No tienes cuenta? Regístrate") }
     }
 }

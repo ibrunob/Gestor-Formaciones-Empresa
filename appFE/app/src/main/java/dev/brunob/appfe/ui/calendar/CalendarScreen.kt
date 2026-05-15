@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +46,11 @@ import androidx.compose.ui.unit.dp
 import dev.brunob.appfe.data.model.DayEntry
 import dev.brunob.appfe.data.model.DayStatus
 import dev.brunob.appfe.ui.AppViewModel
+import dev.brunob.appfe.ui.theme.DesktopBlue
+import dev.brunob.appfe.ui.theme.DesktopDanger
+import dev.brunob.appfe.ui.theme.DesktopMuted
+import dev.brunob.appfe.ui.theme.DesktopSuccess
+import dev.brunob.appfe.ui.theme.desktopTopAppBarColors
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -52,10 +58,10 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-private val Asistencia = Color(0xFF2E7D32) // verde
-private val Ausencia = Color(0xFFC62828)   // rojo
-private val NoLectivo = Color(0xFFBDBDBD)  // gris
-private val Pendiente = Color(0xFFFFC107)  // ámbar
+private val Asistencia = DesktopSuccess
+private val Ausencia = DesktopDanger
+private val NoLectivo = Color(0xFFBDC3C7)
+private val Pendiente = Color(0xFFF1C40F)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,9 +80,11 @@ fun CalendarScreen(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = { Text("Calendario") },
+                colors = desktopTopAppBarColors(),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
@@ -89,7 +97,8 @@ fun CalendarScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -110,17 +119,17 @@ fun CalendarScreen(
             }
             Text(
                 "Días cotizados este mes: $cot",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = DesktopMuted
             )
-            Spacer(Modifier.height(12.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
             WeekHeader()
-            Spacer(Modifier.height(4.dp))
             MonthGrid(
                 mes = mes,
                 byDate = byDate,
                 onDayClick = { dialogDate = it }
             )
-            Spacer(Modifier.height(16.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
             Legend()
         }
     }
@@ -157,7 +166,7 @@ private fun WeekHeader() {
     Row(modifier = Modifier.fillMaxWidth()) {
         days.forEach { d ->
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                Text(d, fontWeight = FontWeight.Bold)
+                Text(d, fontWeight = FontWeight.Bold, color = DesktopMuted)
             }
         }
     }
@@ -205,19 +214,19 @@ private fun DayCell(date: LocalDate, entry: DayEntry?, weekend: Boolean, onClick
         DayStatus.ASISTENCIA -> Asistencia
         DayStatus.AUSENCIA -> Ausencia
         DayStatus.NO_LECTIVO -> NoLectivo
-        DayStatus.PENDIENTE -> Color.Transparent
+        DayStatus.PENDIENTE -> MaterialTheme.colorScheme.surface
     }
     val today = date == LocalDate.now()
     Box(
         modifier = Modifier
             .aspectRatio(1f)
             .padding(2.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(color.copy(alpha = if (status == DayStatus.PENDIENTE) 0f else 0.85f))
+            .clip(RoundedCornerShape(5.dp))
+            .background(color.copy(alpha = if (status == DayStatus.PENDIENTE) 1f else 0.9f))
             .border(
-                width = if (today) 2.dp else 0.dp,
-                color = if (today) MaterialTheme.colorScheme.primary else Color.Transparent,
-                shape = RoundedCornerShape(8.dp)
+                width = if (today) 2.dp else 1.dp,
+                color = if (today) DesktopBlue else MaterialTheme.colorScheme.outline.copy(alpha = 0.42f),
+                shape = RoundedCornerShape(5.dp)
             )
             .clickable(enabled = !weekend || entry != null) { onClick() },
         contentAlignment = Alignment.Center
@@ -241,8 +250,8 @@ private fun DayCell(date: LocalDate, entry: DayEntry?, weekend: Boolean, onClick
 }
 
 @Composable
-private fun Legend() {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+private fun Legend(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         LegendRow(Asistencia, "Asistencia (suma cotización)")
         LegendRow(Ausencia, "Ausencia justificada")
         LegendRow(NoLectivo, "No lectivo (no cuenta)")

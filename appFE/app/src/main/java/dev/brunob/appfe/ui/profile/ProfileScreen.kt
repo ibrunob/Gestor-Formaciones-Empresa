@@ -12,7 +12,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.brunob.appfe.ui.AppViewModel
+import dev.brunob.appfe.ui.theme.DesktopControlShape
+import dev.brunob.appfe.ui.theme.DesktopDanger
+import dev.brunob.appfe.ui.theme.desktopButtonColors
+import dev.brunob.appfe.ui.theme.desktopTopAppBarColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,9 +60,11 @@ fun ProfileScreen(
     var planFormacion by remember { mutableStateOf(s.planFormacion) }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = { Text("Mi perfil") },
+                colors = desktopTopAppBarColors(),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
@@ -79,6 +87,9 @@ fun ProfileScreen(
             Text("Correo: ${s.email}", style = MaterialTheme.typography.bodyMedium)
 
             Spacer(Modifier.height(8.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
+            Spacer(Modifier.height(8.dp))
+
             Text("Formación", style = MaterialTheme.typography.titleMedium)
             Field("Empresa", empresa) { empresa = it }
             Field("Horario en la empresa", horario) { horario = it }
@@ -87,6 +98,9 @@ fun ProfileScreen(
             Field("Plan de formación", planFormacion, singleLine = false) { planFormacion = it }
 
             Spacer(Modifier.height(8.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.45f))
+            Spacer(Modifier.height(8.dp))
+
             Text("Tutores", style = MaterialTheme.typography.titleMedium)
             Field("Tutor de empresa", tutorEmpresa) { tutorEmpresa = it }
             Field("Email tutor empresa", tutorEmpresaEmail) { tutorEmpresaEmail = it }
@@ -108,9 +122,15 @@ fun ProfileScreen(
                     )
                     onBack()
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = DesktopControlShape,
+                colors = desktopButtonColors()
             ) { Text("Guardar cambios") }
-            TextButton(onClick = onLogout, modifier = Modifier.fillMaxWidth()) { Text("Cerrar sesión") }
+            TextButton(
+                onClick = onLogout,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.textButtonColors(contentColor = DesktopDanger)
+            ) { Text("Cerrar sesión") }
         }
     }
 }
@@ -122,6 +142,7 @@ private fun Field(label: String, value: String, singleLine: Boolean = true, onCh
         onValueChange = onChange,
         label = { Text(label) },
         singleLine = singleLine,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        shape = DesktopControlShape
     )
 }

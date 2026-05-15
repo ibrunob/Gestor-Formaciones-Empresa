@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import dev.brunob.appfe.data.model.AbsenceReason
 import dev.brunob.appfe.data.model.DayEntry
 import dev.brunob.appfe.data.model.DayStatus
+import dev.brunob.appfe.ui.theme.DesktopControlShape
+import dev.brunob.appfe.ui.theme.desktopButtonColors
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -67,6 +69,8 @@ fun DayActionDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        shape = DesktopControlShape,
+        containerColor = MaterialTheme.colorScheme.surface,
         title = { Text(fechaTxt) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -83,14 +87,24 @@ fun DayActionDialog(
         },
         confirmButton = {
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Button(onClick = onAsistencia, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = onAsistencia,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = DesktopControlShape,
+                    colors = desktopButtonColors()
+                ) {
                     Text("Marcar asistencia")
                 }
                 OutlinedButton(
                     onClick = { mostrandoAusencia = true },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = DesktopControlShape
                 ) { Text("Marcar ausencia") }
-                OutlinedButton(onClick = onNoLectivo, modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(
+                    onClick = onNoLectivo,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = DesktopControlShape
+                ) {
                     Text("Marcar como no lectivo")
                 }
                 if (existing != null && existing.status != DayStatus.PENDIENTE) {
@@ -135,6 +149,8 @@ private fun AusenciaDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        shape = DesktopControlShape,
+        containerColor = MaterialTheme.colorScheme.surface,
         title = { Text("Ausencia · ${date.format(DateTimeFormatter.ISO_LOCAL_DATE)}") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -158,11 +174,13 @@ private fun AusenciaDialog(
                     value = notas,
                     onValueChange = { notas = it },
                     label = { Text("Notas (opcional)") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = DesktopControlShape
                 )
                 OutlinedButton(
                     onClick = { launcher.launch(arrayOf("*/*")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = DesktopControlShape
                 ) {
                     Text(if (uri == null) "Adjuntar justificante" else "Cambiar justificante")
                 }
@@ -175,7 +193,11 @@ private fun AusenciaDialog(
             }
         },
         confirmButton = {
-            Button(onClick = { onConfirm(motivo.name, uri, notas.takeIf { it.isNotBlank() }) }) {
+            Button(
+                onClick = { onConfirm(motivo.name, uri, notas.takeIf { it.isNotBlank() }) },
+                shape = DesktopControlShape,
+                colors = desktopButtonColors()
+            ) {
                 Text("Guardar")
             }
         },
