@@ -116,29 +116,29 @@ public class MiInformacionController extends BaseMenuController implements Initi
         evals.clear();
         if (currentUser == null) return;
 
-        lblNombre.setText("Nombre: " + nombreCompleto(currentUser));
-        lblEmail.setText("Email: " + safe(currentUser.getEmail()));
-        lblDob.setText("Fecha de nacimiento: " + (currentUser.getDob() != null ? currentUser.getDob().format(FMT) : "—"));
-        lblGenero.setText("Género: " + safe(currentUser.getGender()));
+        lblNombre.setText(nombreCompleto(currentUser));
+        lblEmail.setText(safe(currentUser.getEmail()));
+        lblDob.setText(currentUser.getDob() != null ? currentUser.getDob().format(FMT) : "—");
+        lblGenero.setText(safe(currentUser.getGender()));
 
         if (!(currentUser instanceof Estudiante)) {
-            lblCurso.setText("Curso: —");
-            lblCiclo.setText("Ciclo formativo: —");
+            lblCurso.setText("—");
+            lblCiclo.setText("—");
             limpiarFormacion();
             return;
         }
         Estudiante est = (Estudiante) currentUser;
 
         if (est.getCurso() != null) {
-            lblCurso.setText("Curso: " + safe(est.getCurso().getNombre()));
+            lblCurso.setText(safe(est.getCurso().getNombre()));
             if (est.getCurso().getCicloFormativo() != null) {
-                lblCiclo.setText("Ciclo formativo: " + safe(est.getCurso().getCicloFormativo().getNombre()));
+                lblCiclo.setText(safe(est.getCurso().getCicloFormativo().getNombre()));
             } else {
-                lblCiclo.setText("Ciclo formativo: —");
+                lblCiclo.setText("—");
             }
         } else {
-            lblCurso.setText("Curso: —");
-            lblCiclo.setText("Ciclo formativo: —");
+            lblCurso.setText("—");
+            lblCiclo.setText("—");
         }
 
         List<FormacionEmpresa> fes = formacionEmpresaService.findByEstudiante(est.getId());
@@ -146,23 +146,24 @@ public class MiInformacionController extends BaseMenuController implements Initi
         if (actual == null) {
             limpiarFormacion();
         } else {
-            lblFEEstado.setText("Estado: " + safe(actual.getEstado()));
+            lblFEEstado.setText(safe(actual.getEstado()));
             String ini = actual.getFechaInicio() != null ? actual.getFechaInicio().format(FMT) : "—";
             String fin = actual.getFechaFin() != null ? actual.getFechaFin().format(FMT) : "—";
-            lblFEFechas.setText("Periodo: " + ini + " → " + fin);
+            lblFEFechas.setText(ini + " - " + fin);
             String empresa = "—";
             String tutorNombre = "—";
             String tutorTel = "—";
             if (actual.getTutor() != null) {
                 tutorNombre = nombreCompleto(actual.getTutor());
                 tutorTel = safe(actual.getTutor().getTelefono());
-                if (actual.getTutor().getEmpresa() != null) empresa = safe(actual.getTutor().getEmpresa().getNombre());
+                if (actual.getTutor().getEmpresa() != null) {
+                    empresa = safe(actual.getTutor().getEmpresa().getNombre());
+                }
             }
-            lblFEEmpresa.setText("Empresa: " + empresa);
-            lblFETutorEmp.setText("Tutor de empresa: " + tutorNombre);
-            lblFETelTutor.setText("Teléfono tutor: " + tutorTel);
-            lblFEProfesor.setText("Profesor tutor: "
-                    + (actual.getProfesor() != null ? nombreCompleto(actual.getProfesor()) : "—"));
+            lblFEEmpresa.setText(empresa);
+            lblFETutorEmp.setText(tutorNombre);
+            lblFETelTutor.setText(tutorTel);
+            lblFEProfesor.setText(actual.getProfesor() != null ? nombreCompleto(actual.getProfesor()) : "—");
         }
 
         List<Documento> ldocs = documentoService.findByEstudiante(est.getId());
@@ -183,12 +184,12 @@ public class MiInformacionController extends BaseMenuController implements Initi
     }
 
     private void limpiarFormacion() {
-        lblFEEstado.setText("Estado: —");
-        lblFEFechas.setText("Periodo: —");
-        lblFEEmpresa.setText("Empresa: —");
-        lblFETutorEmp.setText("Tutor de empresa: —");
-        lblFETelTutor.setText("Teléfono tutor: —");
-        lblFEProfesor.setText("Profesor tutor: —");
+        lblFEEstado.setText("—");
+        lblFEFechas.setText("—");
+        lblFEEmpresa.setText("—");
+        lblFETutorEmp.setText("—");
+        lblFETelTutor.setText("—");
+        lblFEProfesor.setText("—");
     }
 
     @FXML
