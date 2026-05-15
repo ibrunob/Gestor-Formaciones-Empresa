@@ -1,7 +1,9 @@
 package dev.brunob.ProyectoBase2025.controller;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -10,16 +12,21 @@ import org.springframework.stereotype.Controller;
 import dev.brunob.ProyectoBase2025.config.StageManager;
 import dev.brunob.ProyectoBase2025.modelo.Role;
 import dev.brunob.ProyectoBase2025.modelo.User;
+import dev.brunob.ProyectoBase2025.services.PasswordRecoveryService;
 import dev.brunob.ProyectoBase2025.services.UserService;
 import dev.brunob.ProyectoBase2025.view.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.shape.SVGPath;
 
 /**
@@ -30,6 +37,8 @@ import javafx.scene.shape.SVGPath;
  */
 @Controller
 public class LoginController implements Initializable {
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w.!#$%&'*+/=?`{|}~-]+@[\\w-]+(?:\\.[\\w-]+)+$");
 
     @FXML
     private Button btnLogin;
@@ -57,6 +66,9 @@ public class LoginController implements Initializable {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordRecoveryService passwordRecoveryService;
 
     @Lazy
     @Autowired
@@ -167,7 +179,78 @@ public class LoginController implements Initializable {
 
     @FXML
     private void forgotPassword(ActionEvent event) {
-        lblLogin.setText("Contacta con administración para restablecer la contraseña");
+        TextInputDialog dialog = new TextInputDialog(getUsername() != null ? getUsername().trim() : "");
+        dialog.setTitle("Recuperar contraseña");
+        dialog.setHeaderText("Introduce el email asociado a tu cuenta");
+        dialog.setContentText("Email:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (!result.isPresent()) {
+            return;
+        }
+
+        String email = result.get().trim();
+        if (!isValidEmail(email)) {
+            showAlert(AlertType.WARNING, "Email no válido", "Introduce un email válido para recuperar la contraseña.");
+            return;
+        }
+
+        lblLogin.setText("Enviando nueva contraseña...");
+        setPasswordRecoveryControlsDisabled(true);
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+                passwordRecoveryService.resetPasswordAndSendEmail(email);
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(workerStateEvent -> {
+            setPasswordRecoveryControlsDisabled(false);
+            lblLogin.setText("");
+            showAlert(AlertType.INFORMATION, "Contraseña restablecida",
+                    "Se ha enviado una nueva contraseña al email indicado.");
+        });
+
+        task.setOnFailed(workerStateEvent -> {
+            setPasswordRecoveryControlsDisabled(false);
+            lblLogin.setText("No se pudo restablecer la contraseña");
+            showAlert(AlertType.ERROR, "Error al enviar el email", getPasswordRecoveryErrorMessage(task.getException()));
+        });
+
+        Thread thread = new Thread(task, "password-recovery");
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    }
+
+    private void setPasswordRecoveryControlsDisabled(boolean disabled) {
+        if (linkForgotPassword != null) {
+            linkForgotPassword.setDisable(disabled);
+        }
+        if (btnLogin != null) {
+            btnLogin.setDisable(disabled);
+        }
+    }
+
+    private String getPasswordRecoveryErrorMessage(Throwable exception) {
+        if (exception instanceof IllegalArgumentException) {
+            return exception.getMessage();
+        }
+
+        return "No se pudo enviar el correo. Revisa la configuración SMTP y vuelve a intentarlo.";
+    }
+
+    private void showAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void updatePasswordVisibility(boolean showPlainText) {
