@@ -68,6 +68,7 @@
                   <Button text="Generar" onAction="#generar" styleClass="button-success" minWidth="-Infinity"/>
                   <Button text="Limpiar filtros" onAction="#limpiar" styleClass="button-warning" minWidth="-Infinity"/>
                   <Button text="Exportar CSV" onAction="#exportar" styleClass="button-info" minWidth="-Infinity"/>
+                  <Button text="Exportar PDF" onAction="#exportarPdf" styleClass="button-info" minWidth="-Infinity"/>
                </children>
             </FlowPane>
 
