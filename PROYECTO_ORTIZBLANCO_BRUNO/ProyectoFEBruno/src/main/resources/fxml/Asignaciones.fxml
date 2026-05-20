@@ -75,6 +75,9 @@
 
             <Separator/>
 
+            <Label text="Profesor responsable" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+            <ComboBox fx:id="cbProfesor" promptText="Seleccionar profesor" maxWidth="1.7976931348623157E308"/>
+
             <Label text="Empresa" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
             <ComboBox fx:id="cbEmpresa" promptText="Seleccionar empresa" maxWidth="1.7976931348623157E308"/>
 
@@ -140,6 +143,7 @@
                   <TableColumn fx:id="colId" prefWidth="50.0" text="ID"/>
                   <TableColumn fx:id="colNombre" prefWidth="190.0" text="Nombre"/>
                   <TableColumn fx:id="colCurso" prefWidth="160.0" text="Curso"/>
+                  <TableColumn fx:id="colProfesorActual" prefWidth="170.0" text="Profesor"/>
                   <TableColumn fx:id="colEmpresaActual" prefWidth="190.0" text="Empresa actual"/>
                   <TableColumn fx:id="colTutorActual" prefWidth="170.0" text="Tutor actual"/>
                   <TableColumn fx:id="colEstadoActual" prefWidth="100.0" text="Estado"/>

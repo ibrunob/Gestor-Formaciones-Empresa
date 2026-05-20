@@ -75,6 +75,7 @@ public class AsignacionEstudianteController extends BaseMenuController implement
     @FXML private TableColumn<EstudianteRow, Long> colId;
     @FXML private TableColumn<EstudianteRow, String> colNombre;
     @FXML private TableColumn<EstudianteRow, String> colCurso;
+    @FXML private TableColumn<EstudianteRow, String> colProfesorActual;
     @FXML private TableColumn<EstudianteRow, String> colEmpresaActual;
     @FXML private TableColumn<EstudianteRow, String> colTutorActual;
     @FXML private TableColumn<EstudianteRow, String> colEstadoActual;
@@ -82,6 +83,7 @@ public class AsignacionEstudianteController extends BaseMenuController implement
 
     @FXML private Label lblEstudiante;
     @FXML private Label lblAsignacionActual;
+    @FXML private ComboBox<Profesor> cbProfesor;
     @FXML private ComboBox<Empresa> cbEmpresa;
     @FXML private ComboBox<Tutor> cbTutor;
     @FXML private DatePicker dpInicio;
@@ -100,6 +102,7 @@ public class AsignacionEstudianteController extends BaseMenuController implement
 
     private final ObservableList<EstudianteRow> rows = FXCollections.observableArrayList();
     private final ObservableList<Curso> cursos = FXCollections.observableArrayList();
+    private final ObservableList<Profesor> profesores = FXCollections.observableArrayList();
     private final ObservableList<Empresa> empresas = FXCollections.observableArrayList();
     private final ObservableList<Tutor> tutoresFiltrados = FXCollections.observableArrayList();
     private final ObservableList<String> estados = FXCollections.observableArrayList(ESTADOS);
@@ -138,6 +141,7 @@ public class AsignacionEstudianteController extends BaseMenuController implement
     public void initialize(URL location, ResourceBundle resources) {
         initHeader("Asignaciones de Estudiantes");
         cbFiltroCurso.setItems(cursos);
+        cbProfesor.setItems(profesores);
         cbEmpresa.setItems(empresas);
         cbTutor.setItems(tutoresFiltrados);
         cbEstado.setItems(estados);
@@ -174,6 +178,13 @@ public class AsignacionEstudianteController extends BaseMenuController implement
             }
             @Override public Empresa fromString(String s) { return null; }
         });
+        cbProfesor.setConverter(new StringConverter<Profesor>() {
+            @Override public String toString(Profesor p) {
+                if (p == null) return "";
+                return p.getFirstName() + " " + (p.getLastName() == null ? "" : p.getLastName());
+            }
+            @Override public Profesor fromString(String s) { return null; }
+        });
         cbTutor.setConverter(new StringConverter<Tutor>() {
             @Override public String toString(Tutor t) {
                 if (t == null) return "";
@@ -187,6 +198,19 @@ public class AsignacionEstudianteController extends BaseMenuController implement
         cursos.clear();
         cursos.add(null); // "Todos los cursos"
         cursos.addAll(cursosVisibles());
+
+        profesores.clear();
+        if (currentUser instanceof Profesor && !(currentUser instanceof Administrador)) {
+            Profesor profesorActual = profesorService.findWithModulos(currentUser.getId());
+            if (profesorActual != null) {
+                profesores.add(profesorActual);
+                cbProfesor.setValue(profesorActual);
+            }
+            cbProfesor.setDisable(true);
+        } else {
+            profesores.addAll(profesorService.findAll());
+            cbProfesor.setDisable(false);
+        }
 
         empresas.clear();
         empresas.addAll(empresaService.findAll());
@@ -236,6 +260,13 @@ public class AsignacionEstudianteController extends BaseMenuController implement
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colCurso.setCellValueFactory(new PropertyValueFactory<>("cursoNombre"));
+
+        colProfesorActual.setCellValueFactory(cd -> {
+            FormacionEmpresa f = cd.getValue().getActual();
+            if (f == null || f.getProfesor() == null) return new ReadOnlyStringWrapper("—");
+            Profesor p = f.getProfesor();
+            return new ReadOnlyStringWrapper(p.getFirstName() + " " + (p.getLastName() == null ? "" : p.getLastName()));
+        });
 
         colEmpresaActual.setCellValueFactory(cd -> {
             FormacionEmpresa f = cd.getValue().getActual();
@@ -290,6 +321,11 @@ public class AsignacionEstudianteController extends BaseMenuController implement
         FormacionEmpresa f = row.getActual();
         if (f == null) {
             lblAsignacionActual.setText("Sin asignación previa");
+            if (currentUser instanceof Profesor && !(currentUser instanceof Administrador)) {
+                cbProfesor.setValue(profesorService.findWithModulos(currentUser.getId()));
+            } else {
+                cbProfesor.setValue(null);
+            }
             cbEmpresa.setValue(null);
             cbTutor.setValue(null);
             dpInicio.setValue(LocalDate.now());
@@ -304,8 +340,10 @@ public class AsignacionEstudianteController extends BaseMenuController implement
                     ? f.getTutor().getFirstName() + " " + (f.getTutor().getLastName() == null ? "" : f.getTutor().getLastName())
                     : "—";
             lblAsignacionActual.setText("Empresa: " + empresaTxt + "\nTutor: " + tutorTxt
+                    + "\nProfesor: " + profesorTexto(f.getProfesor())
                     + "\nEstado: " + (f.getEstado() == null ? "—" : f.getEstado()));
             // Pre-llenar con valores actuales
+                cbProfesor.setValue(f.getProfesor());
             if (f.getTutor() != null) {
                 cbEmpresa.setValue(f.getTutor().getEmpresa());
                 cbTutor.setValue(f.getTutor());
@@ -323,12 +361,19 @@ public class AsignacionEstudianteController extends BaseMenuController implement
 
         FormacionEmpresa actual = seleccionado.getActual();
         if (actual != null && !"Cancelada".equalsIgnoreCase(actual.getEstado())) {
-            // Hay asignación activa: actualizar en sitio (sin cambio de tutor permitido aquí)
-            if (actual.getTutor() == null
-                    || actual.getTutor().getId() != cbTutor.getValue().getId()) {
+            // Hay asignación activa: actualizar en sitio (sin cambio de profesor/tutor permitido aquí)
+                if (actual.getProfesor() != null
+                    && actual.getProfesor().getId() != cbProfesor.getValue().getId()) {
+                warn("El profesor seleccionado es distinto al actual. Use \"Reasignar\" para cambiar de profesor.");
+                return;
+            }
+                if (actual.getTutor() != null
+                    && actual.getTutor().getId() != cbTutor.getValue().getId()) {
                 warn("El tutor seleccionado es distinto al actual. Use \"Reasignar\" para cambiar de empresa o tutor.");
                 return;
             }
+                actual.setProfesor(cbProfesor.getValue());
+                actual.setTutor(cbTutor.getValue());
             actual.setFechaInicio(dpInicio.getValue());
             actual.setFechaFin(dpFin.getValue());
             actual.setEstado(cbEstado.getValue());
@@ -379,6 +424,10 @@ public class AsignacionEstudianteController extends BaseMenuController implement
             warn("Seleccione una empresa.");
             return false;
         }
+        if (cbProfesor.getValue() == null) {
+            warn("Seleccione un profesor responsable.");
+            return false;
+        }
         if (cbTutor.getValue() == null) {
             warn("Seleccione un tutor de empresa.");
             return false;
@@ -405,19 +454,13 @@ public class AsignacionEstudianteController extends BaseMenuController implement
     private FormacionEmpresa construirNueva(String motivo) {
         FormacionEmpresa f = new FormacionEmpresa();
         f.setEstudiante(seleccionado.getEstudiante());
+        f.setProfesor(cbProfesor.getValue());
         f.setTutor(cbTutor.getValue());
         f.setCurso(seleccionado.getEstudiante().getCurso());
         f.setFechaInicio(dpInicio.getValue());
         f.setFechaFin(dpFin.getValue());
         f.setEstado(cbEstado.getValue());
         f.setMotivoCambio(motivo);
-        // Profesor responsable
-        if (currentUser instanceof Profesor && !(currentUser instanceof Administrador)) {
-            Profesor p = profesorService.findWithModulos(currentUser.getId());
-            f.setProfesor(p);
-        } else if (seleccionado.getActual() != null && seleccionado.getActual().getProfesor() != null) {
-            f.setProfesor(seleccionado.getActual().getProfesor());
-        }
         return f;
     }
 
@@ -436,6 +479,11 @@ public class AsignacionEstudianteController extends BaseMenuController implement
         seleccionado = null;
         lblEstudiante.setText("—");
         lblAsignacionActual.setText("Sin asignación previa");
+        if (currentUser instanceof Profesor && !(currentUser instanceof Administrador)) {
+            cbProfesor.setValue(profesorService.findWithModulos(currentUser.getId()));
+        } else {
+            cbProfesor.setValue(null);
+        }
         cbEmpresa.setValue(null);
         cbTutor.setValue(null);
         dpInicio.setValue(null);
@@ -508,5 +556,10 @@ public class AsignacionEstudianteController extends BaseMenuController implement
     private void infoAlert(String title, String msg) {
         Alert a = new Alert(AlertType.INFORMATION);
         a.setTitle(title); a.setHeaderText(null); a.setContentText(msg); a.showAndWait();
+    }
+
+    private String profesorTexto(Profesor profesor) {
+        if (profesor == null) return "—";
+        return profesor.getFirstName() + " " + (profesor.getLastName() == null ? "" : profesor.getLastName());
     }
 }
